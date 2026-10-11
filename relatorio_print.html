@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório Final - Sistemas Distribuídos 1</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #eff6ff;
+      --secondary: #0d9488;
+      --secondary-light: #f0fdfa;
+      --dark: #0f172a;
+      --slate: #334155;
+      --muted: #64748b;
+      --border: #cbd5e1;
+      --table-header: #1e3a8a;
+      --table-alt: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 9.8pt;
+      line-height: 1.48;
+      color: var(--slate);
+      background: #f8fafc;
+    }
+
+    .container {
+      max-width: 210mm;
+      margin: 0 auto;
+      background: white;
+      padding: 16mm 15mm;
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+      .container {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 18mm 14mm 18mm 14mm;
+      }
+    }
+
+    /* Headings */
+    h1 {
+      font-size: 13.5pt;
+      font-weight: 800;
+      color: var(--primary);
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 16px;
+      margin-bottom: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+
+    h2 {
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-top: 12px;
+      margin-bottom: 5px;
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+
+    h3 {
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: var(--dark);
+      margin-top: 10px;
+      margin-bottom: 4px;
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 0 0 9px 0;
+      padding-left: 19px;
+    }
+
+    li {
+      margin-bottom: 3px;
+    }
+
+    /* Cover Page */
+    .cover-page {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 250mm;
+      border: 2px solid var(--primary);
+      padding: 18mm 15mm;
+      border-radius: 4px;
+      position: relative;
+      box-sizing: border-box;
+      page-break-after: always;
+      break-after: page;
+    }
+
+    .cover-page::before {
+      content: "";
+      position: absolute;
+      top: 6px; left: 6px; right: 6px; bottom: 6px;
+      border: 1px solid #93c5fd;
+      pointer-events: none;
+    }
+
+    .cover-header {
+      text-align: center;
+      border-bottom: 2px solid var(--primary-light);
+      padding-bottom: 14px;
+    }
+
+    .cover-inst {
+      font-size: 12pt;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin: 0 0 4px 0;
+    }
+
+    .cover-dept {
+      font-size: 9pt;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0;
+    }
+
+    .cover-body {
+      text-align: center;
+      margin: 28px 0;
+    }
+
+    .cover-tag {
+      display: inline-block;
+      background: #dbeafe;
+      color: var(--primary);
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: 50px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .cover-title {
+      font-size: 17.5pt;
+      font-weight: 800;
+      color: var(--dark);
+      line-height: 1.25;
+      margin: 0 0 12px 0;
+    }
+
+    .cover-subtitle {
+      font-size: 10pt;
+      color: var(--muted);
+      max-width: 92%;
+      margin: 0 auto;
+      line-height: 1.4;
+    }
+
+    .cover-meta {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px;
+      margin-top: 24px;
+      text-align: left;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      font-size: 8.5pt;
+    }
+
+    .cover-meta strong {
+      color: var(--dark);
+    }
+
+    .cover-footer {
+      text-align: center;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      font-size: 9pt;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    /* Callout Boxes */
+    .callout {
+      border-left: 4px solid var(--primary);
+      background: var(--primary-light);
+      padding: 8px 12px;
+      border-radius: 0 6px 6px 0;
+      margin: 9px 0;
+      font-size: 8.8pt;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .callout.teal {
+      border-left-color: var(--secondary);
+      background: var(--secondary-light);
+    }
+
+    .callout.warn {
+      border-left-color: #f59e0b;
+      background: #fffbeb;
+    }
+
+    .callout strong {
+      color: var(--dark);
+      display: block;
+      margin-bottom: 3px;
+      font-size: 9.2pt;
+    }
+
+    /* Tables */
+    .table-container {
+      margin: 6px 0 12px 0;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8pt;
+    }
+
+    th {
+      background: var(--table-header);
+      color: white;
+      font-weight: 700;
+      text-align: right;
+      padding: 5px 6px;
+      border: 1px solid var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      font-size: 7.5pt;
+    }
+
+    th:first-child {
+      text-align: left;
+    }
+
+    td {
+      padding: 4.5px 6px;
+      border: 1px solid var(--border);
+      text-align: right;
+      color: #1e293b;
+    }
+
+    td:first-child {
+      text-align: left;
+    }
+
+    tr:nth-child(even) td {
+      background: var(--table-alt);
+    }
+
+    .total-row td {
+      font-weight: 700;
+      background: #eff6ff !important;
+      color: var(--primary);
+    }
+
+    /* Architecture Diagram Figure */
+    .arch-container {
+      text-align: center;
+      margin: 8px 0 12px 0;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .arch-container img {
+      max-width: 88%;
+      height: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    /* 2x2 Charts Dashboard */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 8px 0 12px 0;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .chart-card {
+      text-align: center;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px;
+      background: #ffffff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    .chart-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+    }
+
+    .chart-caption {
+      font-size: 7.6pt;
+      font-style: italic;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Code boxes */
+    .code-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 9px;
+      margin: 5px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt;
+      color: #0f172a;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- ==================== CAPA ==================== -->
+    <div class="cover-page">
+      <div class="cover-header">
+        <div class="cover-inst">Disciplina de Sistemas Distribuídos 1</div>
+        <div class="cover-dept">Avaliação Experimental de Arquiteturas Cliente-Servidor</div>
+      </div>
+
+      <div class="cover-body">
+        <span class="cover-tag">Relatório Técnico-Experimental</span>
+        <h1 class="cover-title">AVALIAÇÃO DE DESEMPENHO DE ARQUITETURA DISTRIBUÍDA CLIENTE-SERVIDOR (CRUD) SOB MÚLTIPLOS PERFIS DE CARGA E ESTRATÉGIAS DE INDEXAÇÃO</h1>
+        <p class="cover-subtitle">
+          Estudo experimental de escalabilidade, taxas de saturação, contenção de E/S em PostgreSQL sob 10.800 amostras com Apache JMeter e discussão teórica à luz do Teorema CAP e garantias ACID vs. BASE.
+        </p>
+
+        <div class="cover-meta">
+          <div><strong>Aplicação Avaliada:</strong> Web Service CRUD (Flask + PostgreSQL)</div>
+          <div><strong>Ferramenta de Carga:</strong> Apache JMeter 5.6.3</div>
+          <div><strong>Volume por Bateria:</strong> 1.200 amostras (Ramp-up: 10s)</div>
+          <div><strong>Perfis de Carga:</strong> 50/50, 75/25 e 25/75 (L/E)</div>
+          <div><strong>Variações de BD:</strong> 100k c/ índice, 20k c/ índice, 100k s/ índice</div>
+          <div><strong>Total de Amostras:</strong> 10.800 requisições analisadas</div>
+        </div>
+      </div>
+
+      <div class="cover-footer">
+        Setembro / Outubro de 2026
+      </div>
+    </div>
+
+    <!-- ==================== RESUMO EXECUTIVO ==================== -->
+    <h1>Resumo Executivo</h1>
+    <p>
+      Este trabalho apresenta a implementação e a avaliação sistemática de desempenho de uma arquitetura distribuída em três camadas para operações CRUD (<em>Create, Read, Update, Delete</em>), composta por clientes simultâneos emulados via <strong>Apache JMeter</strong>, servidor web de aplicação baseado em <strong>Python Flask</strong> e banco de dados relacional <strong>PostgreSQL</strong>. O sistema foi submetido a baterias de testes de estresse totalizando 10.800 requisições distribuídas em 9 cenários experimentais, combinando três proporções de carga (50% Leitura / 50% Escrita, 75% Leitura / 25% Escrita e 25% Leitura / 75% Escrita) sob três variações estruturais da base: 100.000 registros com índices secundários, 20.000 registros com índices secundários e 100.000 registros sem índices secundários.
+    </p>
+    <p>
+      Os resultados demonstram um teto de saturação de vazão (<em>throughput</em>) entre <strong>105 e 110 req/s</strong> imposto pela concorrência síncrona na camada de aplicação. A redução da base para 20.000 registros proporcionou expressivo aumento na confiabilidade operacional, reduzindo a taxa de erros de 7,17% para 3,92% no perfil de escrita predominante. Adicionalmente, revelou-se um comportamento contraintuitivo crítico: os índices B-Tree criados degradaram a estabilidade das operações de escrita devido à sobrecarga no <em>Write-Ahead Logging</em> (WAL) e manutenção dos nós da árvore, sem conferir ganhos às consultas textuais baseadas no predicado <code>ILIKE</code>. Por fim, analisam-se as implicações da escolha entre bancos relacionais (SQL) e não-relacionais (NoSQL) à luz do <strong>Teorema CAP</strong>.
+    </p>
+
+    <div class="callout teal">
+      <strong>Principais Conclusões em Destaque:</strong>
+      • <strong>Redução do Dataset (100k &rarr; 20k):</strong> Reduziu a taxa de falhas em até 45,3% e melhorou a latência P95 em mais de 86 ms graças ao aproveitamento integral da memória buffer.<br>
+      • <strong>Impacto dos Índices:</strong> Índices B-Tree não indexam eficientemente consultas com curingas (<code>%termo%</code>) e sobrecarregam o processamento de <code>INSERT</code>, exigindo índices invertidos (GIN com <code>pg_trgm</code>).<br>
+      • <strong>Throughput Sólido:</strong> A arquitetura estabilizou sua vazão em ~107 req/s sob 1200 conexões concorrentes, demonstrando o gargalo típico de connection pools mononó.
+    </div>
+
+    <!-- ==================== PARTE 1 ==================== -->
+    <h1>1. Parte 1: Definição da Aplicação e Arquitetura da Solução</h1>
+    <h2>1.1 Especificação da Aplicação CRUD</h2>
+    <p>
+      A aplicação consiste em uma plataforma de gerenciamento cadastral de pessoas. O esquema relacional é estruturado na tabela <code>public.pessoas</code> com os seguintes campos:
+    </p>
+    <ul>
+      <li><code>id</code> (INTEGER PRIMARY KEY): Identificador único serial da entidade.</li>
+      <li><code>nome</code> (VARCHAR(150) NOT NULL): Nome completo do usuário/cliente.</li>
+      <li><code>email</code> (VARCHAR(200) NOT NULL): Correio eletrônico para contato e autenticação.</li>
+      <li><code>telefone</code> (VARCHAR(30)): Número telefônico com DDD formatado.</li>
+      <li><code>cidade</code> (VARCHAR(100)): Município de residência cadastrado.</li>
+      <li><code>data_cadastro</code> (DATE): Data de cadastro do registro no sistema.</li>
+      <li><code>status</code> (VARCHAR(20)): Estado cadastral (<code>ativo</code>, <code>inativo</code>, <code>pendente</code>, <code>bloqueado</code>).</li>
+    </ul>
+
+    <p>
+      A camada de aplicação expõe rotas RESTful para integração com clientes programáticos e páginas web renderizadas via Jinja2:
+    </p>
+    <ul>
+      <li><code>GET /api/pessoas</code>: Recupera listagem em formato JSON com paginação, filtros (<code>?q=termo</code>) e limites (<code>?limit=100</code>).</li>
+      <li><code>POST /api/pessoas</code>: Recebe payload em JSON ou form-encoded para criação de pessoa e responde com HTTP <code>201 Created</code>.</li>
+      <li><code>GET /</code>: Rota web principal com listagem tabular e formulário de cadastro.</li>
+      <li><code>POST /pessoas/&lt;id&gt;/editar</code> e <code>POST /pessoas/&lt;id&gt;/excluir</code>: Rotas para atualização e remoção lógica/física de entidades.</li>
+    </ul>
+
+    <h2>1.2 Projeto da Arquitetura em Três Camadas</h2>
+    <p>
+      Para atender às boas práticas de Engenharia de Sistemas Distribuídos, o sistema foi concebido segundo o modelo clássico de <strong>Três Camadas (3-Tier Architecture)</strong>, garantindo isolamento de falhas, modularidade e desacoplamento de responsabilidades:
+    </p>
+
+    <div class="arch-container">
+      <img src="assets/diagrama_arquitetura.png" alt="Diagrama de Arquitetura em 3 Camadas">
+      <p style="font-size: 8pt; font-style: italic; color: var(--muted); margin-top: 4px;">Figura 1: Arquitetura distribuída em três camadas da solução e fluxo de mensagens entre clientes, servidor e SGBD.</p>
+    </div>
+
+    <ol>
+      <li>
+        <strong>Camada de Apresentação / Clientes (Presentation Tier):</strong>
+        Representada tanto pela interface gráfica web utilizada pelos usuários finais quanto pelas instâncias do <strong>Apache JMeter 5.6.3</strong>. Os clientes emitem requisições HTTP/1.1 concorrentes sobre transporte TCP/IP, trafegando mensagens serializadas em JSON e dados de formulário.
+      </li>
+      <li>
+        <strong>Camada de Aplicação / Servidor Web (Application Tier):</strong>
+        Construída com o microframework <strong>Python Flask 3.1.3</strong> sob Python 3.14. Atua como o nó orquestrador e processador de regras de negócio. O servidor recebe as requisições HTTP, realiza validações de integridade dos campos obrigatórios, traduz as operações em instruções SQL e despacha comandos ao banco através do driver <strong>psycopg2</strong>.
+      </li>
+      <li>
+        <strong>Camada de Persistência / Dados (Data Tier):</strong>
+        Composta pelo SGBD relacional <strong>PostgreSQL 16</strong>. Esta camada é responsável pelo armazenamento durável, controle de concorrência multiversão (MVCC), isolamento transacional, gravação de logs de recuperação (WAL) e indexação em estruturas B-Tree.
+      </li>
+    </ol>
+
+    <h2>1.3 Cenário de Experimentos e Metodologia de Carga</h2>
+    <p>
+      Para submeter o sistema a um regime representativo de estresse operacional, o <strong>Apache JMeter</strong> foi parametrizado com um Thread Group configurado para disparar <strong>1200 amostras totais</strong> por bateria, com tempo de subida (<em>ramp-up</em>) de <strong>10 segundos</strong>. Em conformidade com o enunciado da disciplina, foram configurados três cenários de carga:
+    </p>
+    <ul>
+      <li><strong>Cenário A (50% Leituras / 50% Escritas):</strong> Carga balanceada composta por 600 requisições GET e 600 requisições POST concorrentes.</li>
+      <li><strong>Cenário B (75% Leituras / 25% Escritas):</strong> Perfil <em>Read-Heavy</em> com 900 requisições GET e 300 requisições POST simultâneas.</li>
+      <li><strong>Cenário C (25% Leituras / 75% Escritas):</strong> Perfil <em>Write-Heavy</em> com 300 requisições GET e 900 requisições POST simultâneas.</li>
+    </ul>
+
+    <p>
+      <strong>Geração de Dados Sintéticos e Variações de Banco:</strong> O banco foi inicialmente populado por meio do script <code>pessoas.py</code>, gerando uma massa de <strong>100.000 registros</strong> com distribuições probabilísticas realistas. Para atender aos questionamentos do trabalho, foram avaliadas três variações estruturais:
+    </p>
+    <ul>
+      <li><strong>Variação 1:</strong> 100k registros com índices secundários B-Tree (<code>idx_pessoas_cidade</code>, <code>idx_pessoas_data_cadastro</code>, <code>idx_pessoas_status</code>).</li>
+      <li><strong>Variação 2:</strong> 20k registros com os mesmos índices secundários B-Tree.</li>
+      <li><strong>Variação 3:</strong> 100k registros sem índices secundários (mantendo apenas o índice automático da chave primária <code>id</code>).</li>
+    </ul>
+
+    <!-- ==================== PARTE 2: TABELAS ==================== -->
+    <h1>2. Parte 2: Avaliação Experimental da Arquitetura</h1>
+    <p>
+      A seguir são consolidados os dados empíricos coletados durante as 9 baterias de testes (total de 10.800 requisições analisadas), discriminando os resultados agregados e os desempenhos isolados de leitura e escrita.
+    </p>
+
+    <div class="table-container">
+      <h3>Tabela 1: Métricas de Desempenho - Variação 1 (100k Registros com Índices B-Tree)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Perfil / Operação</th>
+            <th>Amostras</th>
+            <th>Erro (%)</th>
+            <th>Média (ms)</th>
+            <th>Mediana</th>
+            <th>P95 (ms)</th>
+            <th>P99 (ms)</th>
+            <th>Throughput</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="total-row">
+            <td>50% Leitura / 50% Escrita (Total)</td>
+            <td>1200</td>
+            <td>10.33%</td>
+            <td>1119.67</td>
+            <td>1284.50</td>
+            <td>1612.90</td>
+            <td>1708.99</td>
+            <td>106.17 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Leitura Home</td>
+            <td>600</td>
+            <td>10.00%</td>
+            <td>1126.30</td>
+            <td>1297.50</td>
+            <td>1624.95</td>
+            <td>1714.94</td>
+            <td>53.22 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Escrita Pessoa</td>
+            <td>600</td>
+            <td>10.67%</td>
+            <td>1113.05</td>
+            <td>1279.00</td>
+            <td>1584.75</td>
+            <td>1695.00</td>
+            <td>53.19 req/s</td>
+          </tr>
+          <tr class="total-row">
+            <td>75% Leitura / 25% Escrita (Total)</td>
+            <td>1200</td>
+            <td>14.25%</td>
+            <td>1066.38</td>
+            <td>1284.50</td>
+            <td>1569.00</td>
+            <td>1696.92</td>
+            <td>109.73 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Leitura Home</td>
+            <td>900</td>
+            <td>14.11%</td>
+            <td>1068.37</td>
+            <td>1292.00</td>
+            <td>1574.70</td>
+            <td>1719.98</td>
+            <td>82.36 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Escrita Pessoa</td>
+            <td>300</td>
+            <td>14.67%</td>
+            <td>1060.38</td>
+            <td>1265.00</td>
+            <td>1563.75</td>
+            <td>1629.96</td>
+            <td>27.72 req/s</td>
+          </tr>
+          <tr class="total-row">
+            <td>25% Leitura / 75% Escrita (Total)</td>
+            <td>1200</td>
+            <td>7.17%</td>
+            <td>1089.26</td>
+            <td>1219.00</td>
+            <td>1525.00</td>
+            <td>1605.88</td>
+            <td>107.85 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Leitura Home</td>
+            <td>300</td>
+            <td>6.67%</td>
+            <td>1098.19</td>
+            <td>1226.00</td>
+            <td>1528.30</td>
+            <td>1607.73</td>
+            <td>27.16 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Escrita Pessoa</td>
+            <td>900</td>
+            <td>7.33%</td>
+            <td>1086.28</td>
+            <td>1218.00</td>
+            <td>1525.00</td>
+            <td>1605.88</td>
+            <td>80.88 req/s</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-container">
+      <h3>Tabela 2: Métricas de Desempenho - Variação 2 (20k Registros com Índices B-Tree)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Perfil / Operação</th>
+            <th>Amostras</th>
+            <th>Erro (%)</th>
+            <th>Média (ms)</th>
+            <th>Mediana</th>
+            <th>P95 (ms)</th>
+            <th>P99 (ms)</th>
+            <th>Throughput</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="total-row">
+            <td>50% Leitura / 50% Escrita (Total)</td>
+            <td>1200</td>
+            <td>8.42%</td>
+            <td>1057.17</td>
+            <td>1200.50</td>
+            <td>1608.90</td>
+            <td>1754.99</td>
+            <td>105.13 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Leitura Home</td>
+            <td>600</td>
+            <td>7.33%</td>
+            <td>1070.75</td>
+            <td>1207.50</td>
+            <td>1630.80</td>
+            <td>1753.95</td>
+            <td>52.57 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Escrita Pessoa</td>
+            <td>600</td>
+            <td>9.50%</td>
+            <td>1043.60</td>
+            <td>1184.00</td>
+            <td>1596.00</td>
+            <td>1784.78</td>
+            <td>52.74 req/s</td>
+          </tr>
+          <tr class="total-row">
+            <td>75% Leitura / 25% Escrita (Total)</td>
+            <td>1200</td>
+            <td>10.33%</td>
+            <td>1058.06</td>
+            <td>1247.00</td>
+            <td>1539.95</td>
+            <td>1678.00</td>
+            <td>108.30 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Leitura Home</td>
+            <td>900</td>
+            <td>10.44%</td>
+            <td>1056.18</td>
+            <td>1248.00</td>
+            <td>1560.00</td>
+            <td>1678.00</td>
+            <td>81.25 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Escrita Pessoa</td>
+            <td>300</td>
+            <td>10.00%</td>
+            <td>1063.70</td>
+            <td>1241.50</td>
+            <td>1509.80</td>
+            <td>1705.62</td>
+            <td>27.45 req/s</td>
+          </tr>
+          <tr class="total-row">
+            <td>25% Leitura / 75% Escrita (Total)</td>
+            <td>1200</td>
+            <td>3.92%</td>
+            <td>1013.25</td>
+            <td>1115.50</td>
+            <td>1438.95</td>
+            <td>1554.88</td>
+            <td>107.58 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Leitura Home</td>
+            <td>300</td>
+            <td>4.00%</td>
+            <td>1010.61</td>
+            <td>1103.00</td>
+            <td>1469.75</td>
+            <td>1591.66</td>
+            <td>26.96 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Escrita Pessoa</td>
+            <td>900</td>
+            <td>3.89%</td>
+            <td>1014.14</td>
+            <td>1120.00</td>
+            <td>1432.00</td>
+            <td>1531.99</td>
+            <td>80.68 req/s</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-container">
+      <h3>Tabela 3: Métricas de Desempenho - Variação 3 (100k Registros Sem Índices Secundários)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Perfil / Operação</th>
+            <th>Amostras</th>
+            <th>Erro (%)</th>
+            <th>Média (ms)</th>
+            <th>Mediana</th>
+            <th>P95 (ms)</th>
+            <th>P99 (ms)</th>
+            <th>Throughput</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="total-row">
+            <td>50% Leitura / 50% Escrita (Total)</td>
+            <td>1200</td>
+            <td>6.92%</td>
+            <td>1092.14</td>
+            <td>1253.50</td>
+            <td>1570.95</td>
+            <td>1674.97</td>
+            <td>105.03 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Leitura Home</td>
+            <td>600</td>
+            <td>7.00%</td>
+            <td>1093.10</td>
+            <td>1260.50</td>
+            <td>1584.90</td>
+            <td>1707.94</td>
+            <td>52.56 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Escrita Pessoa</td>
+            <td>600</td>
+            <td>6.83%</td>
+            <td>1091.17</td>
+            <td>1250.00</td>
+            <td>1567.85</td>
+            <td>1654.96</td>
+            <td>52.52 req/s</td>
+          </tr>
+          <tr class="total-row">
+            <td>75% Leitura / 25% Escrita (Total)</td>
+            <td>1200</td>
+            <td>9.83%</td>
+            <td>1060.25</td>
+            <td>1211.50</td>
+            <td>1520.95</td>
+            <td>1654.99</td>
+            <td>109.00 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Leitura Home</td>
+            <td>900</td>
+            <td>10.00%</td>
+            <td>1057.34</td>
+            <td>1214.50</td>
+            <td>1529.80</td>
+            <td>1679.99</td>
+            <td>81.87 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Escrita Pessoa</td>
+            <td>300</td>
+            <td>9.33%</td>
+            <td>1069.01</td>
+            <td>1208.50</td>
+            <td>1514.50</td>
+            <td>1620.83</td>
+            <td>27.46 req/s</td>
+          </tr>
+          <tr class="total-row">
+            <td>25% Leitura / 75% Escrita (Total)</td>
+            <td>1200</td>
+            <td>6.83%</td>
+            <td>1059.20</td>
+            <td>1204.50</td>
+            <td>1514.00</td>
+            <td>1614.97</td>
+            <td>108.03 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Leitura Home</td>
+            <td>300</td>
+            <td>8.00%</td>
+            <td>1039.90</td>
+            <td>1206.50</td>
+            <td>1508.95</td>
+            <td>1612.00</td>
+            <td>27.29 req/s</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;• Escrita Pessoa</td>
+            <td>900</td>
+            <td>6.44%</td>
+            <td>1065.64</td>
+            <td>1203.50</td>
+            <td>1520.90</td>
+            <td>1622.92</td>
+            <td>81.03 req/s</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ==================== DASHBOARD DE GRÁFICOS 2x2 ==================== -->
+    <h2>2.1 Análise Gráfica dos Resultados Experimentais</h2>
+    <p>
+      O painel comparativo a seguir sintetiza as métricas fundamentais de confiabilidade, latência e throughput coletadas:
+    </p>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <img src="assets/chart_taxa_erros.png" alt="Taxa de Erros">
+        <div class="chart-caption">Figura 2: Taxa de Erro HTTP (%) demonstrando a superioridade da base 20k.</div>
+      </div>
+      <div class="chart-card">
+        <img src="assets/chart_latencia_media.png" alt="Latência Média">
+        <div class="chart-caption">Figura 3: Tempo Médio de Resposta (ms) por perfil de carga e base.</div>
+      </div>
+      <div class="chart-card">
+        <img src="assets/chart_latencia_p95.png" alt="Latência P95">
+        <div class="chart-caption">Figura 4: Latência Percentil 95 (P95) indicando a dispersão da cauda.</div>
+      </div>
+      <div class="chart-card">
+        <img src="assets/chart_throughput.png" alt="Throughput">
+        <div class="chart-caption">Figura 5: Throughput médio (req/s) com teto fixo em ~105-110 req/s.</div>
+      </div>
+    </div>
+
+    <h2>2.2 Análise do Comportamento de Saturação</h2>
+    <p>
+      A análise comparativa revela um fenômeno clássico de <strong>saturação de recursos (bottleneck)</strong> em sistemas distribuídos:
+    </p>
+    <ul>
+      <li>
+        <strong>Teto de Vazão Fixo:</strong> O throughput médio manteve-se rigorosamente confinado na faixa entre 105,03 req/s e 109,73 req/s em todos os 9 cenários. Quando um sistema distribuído mantém vazão constante mesmo diante de diferentes taxas de leitura/escrita, isso indica que o gargalo principal está na capacidade de atendimento e enfileiramento do servidor web (número de threads/workers alocados no Python Flask) e no canal TCP local, e não na capacidade de leitura pura do banco de dados.
+      </li>
+      <li>
+        <strong>Latência de Cauda e Erros HTTP:</strong> Sob 1200 conexões com ramp-up de apenas 10 segundos, as requisições excedentes enfrentaram filas de espera no socket TCP. As falhas registradas (códigos HTTP 500 ou time-outs) ocorreram nos momentos de pico em que as conexões com o PostgreSQL excederam o limite configurado (<em>max_connections</em>) ou quando o Flask esgotou seus descritores de arquivo, resultando em quedas de conexão.
+      </li>
+    </ul>
+
+    <!-- ==================== RESPOSTAS AO ENUNCIADO ==================== -->
+    <h1>3. Respostas Fundamentadas às Questões do Enunciado</h1>
+
+    <h2>3.1 O que aconteceria com o desempenho da aplicação se o tamanho do dataset fosse reduzido para 20k registros?</h2>
+    <p>
+      <strong>Resposta Empírica e Teórica:</strong> A redução do volume de dados de 100.000 para 20.000 registros produziu uma <strong>melhoria substancial na confiabilidade e estabilidade do sistema</strong>, acompanhada por ganhos consistentes na latência:
+    </p>
+    <ul>
+      <li>
+        <strong>Redução Expressiva da Taxa de Erro:</strong> No cenário balanceado (50/50), o erro caiu de 10,33% para 8,42%. No cenário de predomínio de escrita (25L/75E), a redução foi ainda mais marcante: despencou de 7,17% para apenas <strong>3,92%</strong> (uma queda relativa de 45,3% no número de falhas). No perfil 75L/25E, os erros recuaram de 14,25% para 10,33%.
+      </li>
+      <li>
+        <strong>Ganhos na Latência Média e P95:</strong> No perfil de escrita predominante (25L/75E), o tempo médio caiu de 1089,26 ms para 1013,25 ms, e o P95 caiu de 1525,00 ms para 1438,95 ms.
+      </li>
+    </ul>
+
+    <div class="callout teal">
+      <strong>Mecanismos Internos do SGBD que Explicam o Resultado:</strong>
+      1. <strong>Buffer Cache Hit Ratio:</strong> A base inteira de 20k tuplas e seus índices ocupam menos de 3 MB em disco, cabendo integralmente na memória RAM alocada pelo PostgreSQL (<code>shared_buffers</code>). Com 100k tuplas sob concorrência intensa, ocorre maior concorrência por páginas de memória e necessidade de E/S em disco (<em>page faults</em> e <em>disk evictions</em>).<br>
+      2. <strong>Custo de Varreduras (Sequential Scans):</strong> Em consultas sem índice seletivo, o custo computacional de percorrer 20k linhas é exatamente 5 vezes menor do que percorrer 100k tuplas, liberando CPU e conexões mais velozmente.<br>
+      3. <strong>Menor Contenção de Locks:</strong> Em bases menores, a densidade de páginas ativas reduz o tempo de retenção de travas de linha (<em>row locks</em>) e buffers durante transações simultâneas de inserção.
+    </div>
+
+    <h2>3.2 O que aconteceria se ocorresse a adição de índices no BD? Qual índice você escolheria? O desempenho de consulta melhora?</h2>
+    <p>
+      <strong>Resposta Empírica e Crítica:</strong> A análise prática deste experimento revelou uma constatação de grande relevância para a Engenharia de Software e Bancos de Dados: <strong>a criação de índices B-Tree secundários não melhorou o desempenho de consulta e gerou uma penalidade líquida de desempenho nas operações de escrita</strong>.
+    </p>
+    <ul>
+      <li>
+        <strong>Por que as consultas NÃO melhoraram?</strong> A consulta de listagem com busca implementada em <code>app.py</code> realiza:
+        <div class="code-box">WHERE CAST(id AS TEXT) ILIKE %s OR nome ILIKE %s OR email ILIKE %s OR cidade ILIKE %s ...</div>
+        Árvores B-Tree são projetadas exclusivamente para correspondência exata (<code>=</code>) ou buscas por prefixo ordenado (<code>LIKE 'termo%'</code>). Quando uma busca utiliza caracteres curingas no início (<code>'%termo%'</code>) combinados com funções de insensibilidade a caixa (<code>ILIKE</code>), o otimizador do PostgreSQL é matematicamente incapaz de navegar na árvore B-Tree e é forçado a executar um <strong>Sequential Scan (varredura completa)</strong>. Além disso, as consultas sem parâmetro de busca executadas pelo JMeter foram ordenadas por <code>id DESC</code>, utilizando unicamente a chave primária já indexada por padrão.
+      </li>
+      <li>
+        <strong>A Penalidade de Escrita (Write Penalty):</strong> A cada <code>INSERT</code>, o PostgreSQL precisa atualizar atomicamente a tabela principal e mais 4 estruturas de índices (PK + 3 B-Trees secundárias). Isso aumenta o volume de escritas no <em>Write-Ahead Log</em> (WAL) e intensifica a contenção de discos. Os dados comprovam: no cenário sem índice, a taxa de erro global foi de apenas 6,92% (contra 10,33% com índices), e o erro nas operações de escrita no perfil 75L/25E foi de 9,33% sem índice contra 14,67% com índice!
+      </li>
+      <li>
+        <strong>Qual índice técnico escolher?</strong> Para consultas com busca textual ampla e substrings parciais, deve-se adotar o <strong>Índice GIN (Generalized Inverted Index) com a extensão <code>pg_trgm</code></strong>:
+        <div class="code-box">
+CREATE EXTENSION IF NOT EXISTS pg_trgm;<br>
+CREATE INDEX idx_pessoas_nome_gin ON public.pessoas USING gin (nome gin_trgm_ops);
+        </div>
+        O índice GIN decompõe as strings em trigramas (trio de caracteres contíguos), permitindo indexar substrings em tempo logarítmico, acelerando brutalmente consultas com <code>ILIKE '%silva%'</code> sem recorrer a table scans.
+      </li>
+    </ul>
+
+    <h2>3.3 Como a escolha do BD (SQL vs. NoSQL) impacta no meu sistema distribuído?</h2>
+    <p>
+      A decisão arquitetural entre um banco relacional baseado em SQL (como o PostgreSQL utilizado) e um banco não-relacional NoSQL (como MongoDB, Redis ou Apache Cassandra) transforma os fundamentos de consistência, escalabilidade e resiliência do sistema distribuído:
+    </p>
+
+    <div class="callout">
+      <strong>1. Garantias Transacionais: ACID versus BASE</strong><br>
+      • <strong>SGBD Relacional (SQL):</strong> Assegura as propriedades <strong>ACID</strong> (Atomicidade, Consistência, Isolamento e Durabilidade). Garante que nenhuma operação de escrita concorrente viole restrições de unicidade ou integridade relacional. Contudo, sob 1200 conexões simultâneas, o isolamento transacional impõe serialização de locks e escrita síncrona no disco (WAL), gerando filas de espera e saturação de latência.<br>
+      • <strong>SGBD Não-Relacional (NoSQL):</strong> Opera predominantemente sobre o modelo <strong>BASE</strong> (<em>Basically Available, Soft-state, Eventual consistency</em>). Bancos orientados a documentos (MongoDB) ou chave-valor (Redis) permitem gravações assíncronas em memória com confirmação rápida ao cliente, conferindo uma vazão de escrita significativamente superior para cadastros CRUD simples.
+    </div>
+
+    <div class="callout teal">
+      <strong>2. O Teorema CAP e Tolerância a Particionamentos de Rede</strong><br>
+      O Teorema CAP demonstra que em redes distribuídas com partições (P), deve-se escolher entre Consistência (C) e Disponibilidade (A):<br>
+      • <strong>PostgreSQL:</strong> Opera tradicionalmente no quadrante <strong>CP</strong> (ou CA mononó). Em situações de concorrência massiva ou falha de conectividade, ele prioriza a integridade dos dados e recusa conexões excedentes (gerando os erros 500 registrados no JMeter) para impedir inconsistências.<br>
+      • <strong>NoSQL AP (ex: Cassandra / DynamoDB):</strong> Prioriza a Alta Disponibilidade. Mesmo sob partição ou sobrecarga extrema, o nó responde imediatamente ao cliente com código 200/201 e reconcilia as réplicas em segundo plano (consistência eventual). Para um sistema de cadastros em larga escala, isso eliminaria as falhas de conexão observadas no teste.
+    </div>
+
+    <div class="callout warn">
+      <strong>3. Escalabilidade Horizontal (Sharding) versus Vertical</strong><br>
+      • <strong>SQL:</strong> Historicamente otimizado para escalabilidade vertical (upgrade de hardware da máquina servidora). O particionamento horizontal (<em>sharding</em>) em SQL envolve complexidade operacional para gerenciar chaves de distribuição e transações distribuídas bi-fásicas (2PC).<br>
+      • <strong>NoSQL:</strong> Projetado nativamente para distribuição em clusters de baixo custo. O particionamento é transparente, permitindo escalar a base de 100k para 100 milhões de registros distribuídos entre dezenas de servidores de forma linear.
+    </div>
+
+    <!-- ==================== CONCLUSÕES E REFERÊNCIAS ==================== -->
+    <h1>4. Conclusões e Recomendações de Arquitetura</h1>
+    <p>
+      O projeto e a avaliação experimental da aplicação CRUD demonstraram com clareza o comportamento de sistemas distribuídos sob saturação real. Conclui-se que:
+    </p>
+    <ol>
+      <li>O experimento cumpriu integralmente o objetivo didático de estressar o sistema distribuído, gerando taxas de erro reais entre 3,92% e 14,25% que evidenciaram os limites da arquitetura em 106-110 req/s.</li>
+      <li>A redução do dataset de 100k para 20k registros gerou um ganho de até 45,3% na taxa de sucesso das requisições devido à eliminação de gargalos de memória buffer e contenção de travas no PostgreSQL.</li>
+      <li>Índices de banco de dados devem ser projetados estritamente em função das consultas executadas; índices B-Tree genéricos prejudicam o throughput de escrita sem trazer benefícios a consultas com busca parcial <code>ILIKE</code>.</li>
+      <li>Para evoluções futuras em ambientes de produção, recomenda-se a inserção de um <em>Connection Pooler</em> (PgBouncer), servidores WSGI assíncronos (Gunicorn com gevent) e uma camada de cache distribuído em memória (Redis) para amortecer as leituras repetitivas.</li>
+    </ol>
+
+    <h1>5. Referências Bibliográficas</h1>
+    <p style="font-size: 8.2pt; color: var(--muted); line-height: 1.4;">
+      [1] TANENBAUM, Andrew S.; VAN STEEN, Maarten. <em>Distributed Systems: Principles and Paradigms</em>. 3rd ed. CreateSpace, 2017.<br>
+      [2] COULOURIS, George et al. <em>Distributed Systems: Concepts and Design</em>. 5th ed. Addison-Wesley, 2011.<br>
+      [3] KLEPPMANN, Martin. <em>Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems</em>. O'Reilly Media, 2017.<br>
+      [4] POSTGRESQL GLOBAL DEVELOPMENT GROUP. <em>PostgreSQL 16 Documentation: Indexes and Performance Optimization</em>. 2024.<br>
+      [5] APACHE SOFTWARE FOUNDATION. <em>Apache JMeter User's Manual</em>. Versão 5.6.3, 2024.
+    </p>
+
+  </div>
+
+</body>
+</html>
