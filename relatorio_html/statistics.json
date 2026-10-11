@@ -1,0 +1,50 @@
+{
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 1200,
+    "errorCount" : 124,
+    "errorPct" : 10.333333,
+    "meanResTime" : 1119.6716666666682,
+    "medianResTime" : 1284.5,
+    "minResTime" : 0.0,
+    "maxResTime" : 1864.0,
+    "pct1ResTime" : 1542.9,
+    "pct2ResTime" : 1612.9,
+    "pct3ResTime" : 1708.99,
+    "throughput" : 106.1665044678404,
+    "receivedKBytesPerSec" : 1191.3938086127575,
+    "sentKBytesPerSec" : 24.565864704060868
+  },
+  "Leitura Home" : {
+    "transaction" : "Leitura Home",
+    "sampleCount" : 600,
+    "errorCount" : 60,
+    "errorPct" : 10.0,
+    "meanResTime" : 1126.2950000000008,
+    "medianResTime" : 1297.5,
+    "minResTime" : 0.0,
+    "maxResTime" : 1864.0,
+    "pct1ResTime" : 1554.9,
+    "pct2ResTime" : 1624.9499999999998,
+    "pct3ResTime" : 1714.94,
+    "throughput" : 53.21507760532151,
+    "receivedKBytesPerSec" : 1169.0115715077604,
+    "sentKBytesPerSec" : 9.213899667405764
+  },
+  "Escrita Pessoa" : {
+    "transaction" : "Escrita Pessoa",
+    "sampleCount" : 600,
+    "errorCount" : 64,
+    "errorPct" : 10.666667,
+    "meanResTime" : 1113.0483333333327,
+    "medianResTime" : 1279.0,
+    "minResTime" : 0.0,
+    "maxResTime" : 1836.0,
+    "pct1ResTime" : 1530.9,
+    "pct2ResTime" : 1584.7499999999995,
+    "pct3ResTime" : 1695.0,
+    "throughput" : 53.18677422214343,
+    "receivedKBytesPerSec" : 25.32743107880507,
+    "sentKBytesPerSec" : 15.404773512986436
+  }
+}

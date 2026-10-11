@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório Comparativo de Desempenho</title>
+  <style>
+    :root {
+      --bg: #f7f7fb;
+      --card: #ffffff;
+      --text: #1b1f24;
+      --muted: #4b5563;
+      --line: #d1d5db;
+      --head: #0f172a;
+      --accent: #0d9488;
+      --warn: #b45309;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 28px auto;
+      padding: 0 16px 28px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+      color: var(--head);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+
+    .muted {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+      font-size: 0.95rem;
+    }
+
+    .meta div {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: #0b1324;
+    }
+
+    .note {
+      border-left: 4px solid var(--accent);
+      background: #f0fdfa;
+      padding: 10px 12px;
+      margin-top: 10px;
+    }
+
+    .warn {
+      border-left: 4px solid var(--warn);
+      background: #fff7ed;
+      padding: 10px 12px;
+      margin-top: 10px;
+    }
+
+    ul, ol {
+      margin: 8px 0 0 18px;
+    }
+
+    .small {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    @media print {
+      body { background: #fff; }
+      .card { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="card">
+      <h1>Relatório Comparativo de Desempenho</h1>
+      <p class="muted">Comparação de testes de carga realizados com o JMeter, abrangendo três configurações de base de dados e três proporções de leitura e escrita.</p>
+      <div class="meta">
+        <div><strong>Aplicação:</strong> Flask + PostgreSQL</div>
+        <div><strong>Carga:</strong> 1200 amostras por cenário</div>
+        <div><strong>Cenários:</strong> 50/50, 25/75, 75/25</div>
+        <div><strong>Variações:</strong> 100k com índice, 20k com índice, 100k sem índice</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>1. Variação: 100k registros com índice</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Perfil</th>
+            <th>Amostras</th>
+            <th>Erro %</th>
+            <th>Média (ms)</th>
+            <th>Mediana (ms)</th>
+            <th>P95 (ms)</th>
+            <th>P99 (ms)</th>
+            <th>Throughput (req/s)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>50% leitura / 50% escrita</td><td>1200</td><td>10.33</td><td>1119.67</td><td>1284.50</td><td>1612.90</td><td>1708.99</td><td>106.17</td></tr>
+          <tr><td>25% leitura / 75% escrita</td><td>1200</td><td>7.17</td><td>1089.26</td><td>1219.00</td><td>1525.00</td><td>1605.88</td><td>107.85</td></tr>
+          <tr><td>75% leitura / 25% escrita</td><td>1200</td><td>14.25</td><td>1066.38</td><td>1284.50</td><td>1569.00</td><td>1696.92</td><td>109.73</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>2. Variação: 20k registros com índice</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Perfil</th>
+            <th>Amostras</th>
+            <th>Erro %</th>
+            <th>Média (ms)</th>
+            <th>Mediana (ms)</th>
+            <th>P95 (ms)</th>
+            <th>P99 (ms)</th>
+            <th>Throughput (req/s)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>50% leitura / 50% escrita</td><td>1200</td><td>8.42</td><td>1057.17</td><td>1200.50</td><td>1608.90</td><td>1754.99</td><td>105.13</td></tr>
+          <tr><td>25% leitura / 75% escrita</td><td>1200</td><td>3.92</td><td>1013.25</td><td>1115.50</td><td>1438.95</td><td>1554.88</td><td>107.58</td></tr>
+          <tr><td>75% leitura / 25% escrita</td><td>1200</td><td>10.33</td><td>1058.06</td><td>1247.00</td><td>1539.95</td><td>1678.00</td><td>108.30</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>3. Variação: 100k registros sem índice</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Perfil</th>
+            <th>Amostras</th>
+            <th>Erro %</th>
+            <th>Média (ms)</th>
+            <th>Mediana (ms)</th>
+            <th>P95 (ms)</th>
+            <th>P99 (ms)</th>
+            <th>Throughput (req/s)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>50% leitura / 50% escrita</td><td>1200</td><td>6.92</td><td>1092.14</td><td>1253.50</td><td>1570.95</td><td>1674.97</td><td>105.03</td></tr>
+          <tr><td>25% leitura / 75% escrita</td><td>1200</td><td>6.83</td><td>1059.20</td><td>1204.50</td><td>1514.00</td><td>1614.97</td><td>108.03</td></tr>
+          <tr><td>75% leitura / 25% escrita</td><td>1200</td><td>9.83</td><td>1060.25</td><td>1211.50</td><td>1520.95</td><td>1654.99</td><td>109.00</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>Análise 1: Efeito do Tamanho da Base de Dados (Dataset)</h2>
+      <p>Comparando os cenários com índice entre 100k e 20k registros:</p>
+      <ul>
+        <li>No perfil 50/50, a taxa de erro caiu de 10,33% para 8,42% e a média passou de 1119,67 ms para 1057,17 ms.</li>
+        <li>No perfil 25/75, a taxa de erro caiu de 7,17% para 3,92% e a média passou de 1089,26 ms para 1013,25 ms.</li>
+        <li>No perfil 75/25, a taxa de erro caiu de 14,25% para 10,33% e a média manteve-se estável em torno de 1058 ms.</li>
+      </ul>
+      <div class="note">
+        <strong>Resultado principal:</strong> reduzir o volume de dados para 20k melhorou principalmente a confiabilidade do sistema (menor taxa de erro), proporcionando também um ganho moderado de latência.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Análise 2: Efeito dos Índices (100k registros)</h2>
+      <p>Comparando o cenário de 100k registros com índice versus sem índice:</p>
+      <ul>
+        <li>No perfil 50/50, o erro foi de 10,33% com índice para 6,92% sem índice.</li>
+        <li>No perfil 25/75, o erro foi de 7,17% com índice para 6,83% sem índice.</li>
+        <li>No perfil 75/25, o erro foi de 14,25% com índice para 9,83% sem índice.</li>
+      </ul>
+      <div class="warn">
+        <strong>Observação:</strong> Esse comportamento contraintuitivo (onde a ausência de índice registrou menores taxas de erro em alguns casos) sugere que os índices atuais podem não estar sendo devidamente aproveitados pelas consultas implementadas, enquanto ainda adicionam custo computacional de manutenção em operações de escrita. Fatores como o comportamento do cache e pequenas variações naturais entre as execuções também podem influenciar.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Análise 3: Perfil de Leitura e Escrita</h2>
+      <ul>
+        <li>O <em>throughput</em> total manteve-se relativamente estável em todos os cenários, variando entre 105 e 110 req/s.</li>
+        <li>A diferença entre os perfis refletiu-se de forma mais evidente na taxa de erro e nos percentis mais altos de latência (cauda).</li>
+        <li>O perfil de 75% leitura / 25% escrita com 100k registros e índice apresentou o pior índice de erros gerais (14,25%).</li>
+      </ul>
+      <div class="note">
+        <strong>Resultado principal:</strong> sob carga elevada, a aplicação atinge um patamar de saturação similar de vazão (<em>throughput</em>), fazendo com que as diferenças de desempenho entre os cenários apareçam na qualidade da resposta (erros e picos de latência).
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Discussão Teórica: Impacto da Redução do Dataset</h2>
+      <p>A redução do volume de dados de 100k para 20k registros demonstrou um impacto positivo direto na estabilidade e na confiabilidade da aplicação sob estresse. Nos cenários avaliados com 20k registros, observou-se uma diminuição consistente na taxa de erros do sistema (por exemplo, caindo de 10,33% para 8,42% no perfil 50/50), acompanhada por ganhos moderados na latência média. Essa melhora ocorre porque conjuntos de dados menores exigem menos esforço do SGBD para varreduras de tabelas (<em>sequential scans</em>), reduzem o consumo de memória para manutenção de buffers e diminuem a contenção de bloqueios (<em>locks</em>) transacionais, permitindo que o PostgreSQL responda às requisições do Flask de forma mais ágil e com menor índice de falhas por saturação.</p>
+    </section>
+
+    <section class="card">
+      <h2>Discussão Teórica: Análise de Índices</h2>
+      <p>Para este estudo, a estratégia de indexação concentrou-se na criação de um índice do tipo B-Tree na coluna de chave/busca principal da tabela de pessoas/clientes, visando otimizar a recuperação de registros nas operações de leitura. Contudo, os resultados práticos sob carga elevada revelaram um comportamento complexo: em alguns cenários, a presença do índice apresentou uma taxa de erros ligeiramente superior ou equivalente à do cenário sem índice. Esse efeito contraintuitivo sugere que, para o volume e as consultas específicas executadas, o custo computacional e de I/O para a manutenção da árvore do índice durante as operações de escrita (INSERT/UPDATE) acabou por neutralizar parte dos ganhos de leitura. Isso evidencia que a melhoria de desempenho não depende apenas da criação isolada de índices, mas sim do alinhamento estrito entre a estrutura do índice e o plano de execução das consultas (<em>query planner</em>) da aplicação.</p>
+    </section>
+
+    <section class="card">
+      <h2>Discussão Teórica: SQL vs. NoSQL</h2>
+      <p>A escolha de um banco de dados relacional baseado em SQL (como o PostgreSQL) impacta diretamente o sistema ao impor um modelo altamente estruturado que prioriza a integridade referencial, a atomicidade e as garantias ACID. Isso é ideal para o modelo de CRUD proposto, pois assegura que transações de escrita e leitura de registros ocorram de maneira consistente. Em contraponto, caso o sistema fosse migrado para uma arquitetura NoSQL (orientada a documentos, como o MongoDB), o impacto principal seria a facilidade de escalabilidade horizontal e a flexibilidade no esquema de dados, o que poderia otimizar o desempenho bruto de escritas massivas e consultas desacopladas. No entanto, em um ambiente NoSQL, perder-se-iam as garantias rígidas de transações relacionais nativas que o modelo SQL oferece com facilidade.</p>
+    </section>
+
+    <section class="card">
+      <h2>Conclusões para o Trabalho</h2>
+      <ol>
+        <li>Os testes com 1200 amostras por cenário evidenciaram uma saturação real do sistema, gerando latências elevadas e erros não nulos que validam o estresse da aplicação.</li>
+        <li>A redução do volume de dados (de 100k para 20k) trouxe uma melhoria consistente na estabilidade, principalmente na redução de erros.</li>
+        <li>Nos testes executados, os índices atuais não demonstraram ganhos claros no resultado agregado final, apontando a necessidade de revisar o mapeamento e o planejamento das consultas (queries) utilizadas.</li>
+        <li>A arquitetura escolhida apresentou consistência funcional, mas o comportamento sob estresse demonstrou forte dependência de estratégias eficientes de consulta, indexação e gerenciamento de volume.</li>
+      </ol>
+    </section>
+  </div>
+</body>
+</html>
