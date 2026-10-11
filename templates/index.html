@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trabalho de Sistemas Distribuídos</title>
+</head>
+<body>
+  <header>
+    <h1>Trabalho de Sistemas Distribuídos</h1>
+    <p>CRUD simples com PostgreSQL e servidor Flask.</p>
+  </header>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <section>
+        <h2>Mensagens</h2>
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+  {% endwith %}
+
+  {% if db_error %}
+    <section>
+      <h2>Erro de conexão</h2>
+      <p>{{ db_error }}</p>
+      <p>Configure as variáveis PGHOST, PGPORT, PGDATABASE, PGUSER e PGPASSWORD antes de rodar o servidor.</p>
+    </section>
+  {% endif %}
+
+  <main>
+    <section>
+      <h2>Buscar pessoas</h2>
+      <form method="get" action="/">
+        <p>
+          <label for="q">Pesquisar por nome, e-mail, telefone, cidade, status ou id:</label><br>
+          <input type="text" id="q" name="q" value="{{ search }}">
+        </p>
+        <button type="submit">Buscar</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Cadastro de pessoa</h2>
+      <form method="post" action="/pessoas">
+        <p>
+          <label for="nome">Nome:</label><br>
+          <input type="text" id="nome" name="nome">
+        </p>
+        <p>
+          <label for="email">E-mail:</label><br>
+          <input type="email" id="email" name="email">
+        </p>
+        <p>
+          <label for="telefone">Telefone:</label><br>
+          <input type="text" id="telefone" name="telefone">
+        </p>
+        <p>
+          <label for="cidade">Cidade:</label><br>
+          <input type="text" id="cidade" name="cidade">
+        </p>
+        <p>
+          <label for="status">Status:</label><br>
+          <select id="status" name="status">
+            {% for option in status_options %}
+              <option value="{{ option }}">{{ option|capitalize }}</option>
+            {% endfor %}
+          </select>
+        </p>
+        <button type="submit">Salvar</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Resultados</h2>
+      <p>Total exibido: {{ total_shown }}</p>
+
+      {% if people %}
+        <table border="1">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Telefone</th>
+              <th>Cidade</th>
+              <th>Data de cadastro</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for person in people %}
+              <tr>
+                <td>{{ person.id }}</td>
+                <td>{{ person.nome }}</td>
+                <td>{{ person.email }}</td>
+                <td>{{ person.telefone or '' }}</td>
+                <td>{{ person.cidade or '' }}</td>
+                <td>{{ person.data_cadastro }}</td>
+                <td>{{ person.status or '' }}</td>
+                <td>
+                  <form method="get" action="/pessoas/{{ person.id }}/editar">
+                    <button type="submit">Editar</button>
+                  </form>
+                  <form method="post" action="/pessoas/{{ person.id }}/excluir">
+                    <button type="submit">Excluir</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>Nenhuma pessoa encontrada.</p>
+      {% endif %}
+    </section>
+
+    <section>
+      <h2>Observações</h2>
+      <ul>
+        <li>O banco precisa estar com a tabela <strong>pessoas</strong> criada e o CSV importado.</li>
+        <li>O servidor mostra até 100 registros por vez para não carregar demais a página.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

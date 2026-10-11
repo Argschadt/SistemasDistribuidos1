@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trabalho de Sistemas Distribuídos</title>
+</head>
+<body>
+  <header>
+    <h1>Trabalho de Sistemas Distribuídos</h1>
+    <p>Aplicação CRUD com PostgreSQL e teste de desempenho.</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Sobre o projeto</h2>
+      <p>
+        Este site é uma base simples para apresentar o trabalho da faculdade.
+        A proposta é ter um CRUD de pessoas, um banco PostgreSQL e testes de leitura e escrita.
+      </p>
+    </section>
+
+    <section>
+      <h2>Cadastro de pessoa</h2>
+      <form action="#" method="post">
+        <p>
+          <label for="nome">Nome:</label><br>
+          <input type="text" id="nome" name="nome">
+        </p>
+        <p>
+          <label for="email">E-mail:</label><br>
+          <input type="email" id="email" name="email">
+        </p>
+        <p>
+          <label for="telefone">Telefone:</label><br>
+          <input type="text" id="telefone" name="telefone">
+        </p>
+        <p>
+          <label for="cidade">Cidade:</label><br>
+          <input type="text" id="cidade" name="cidade">
+        </p>
+        <p>
+          <label for="status">Status:</label><br>
+          <select id="status" name="status">
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Inativo</option>
+            <option value="pendente">Pendente</option>
+            <option value="bloqueado">Bloqueado</option>
+          </select>
+        </p>
+        <button type="submit">Salvar</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Consulta de pessoas</h2>
+      <form action="#" method="get">
+        <p>
+          <label for="busca">Buscar por nome, e-mail ou cidade:</label><br>
+          <input type="text" id="busca" name="busca">
+        </p>
+        <button type="submit">Pesquisar</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Lista de pessoas</h2>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th>Cidade</th>
+            <th>Data de cadastro</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Ana Silva</td>
+            <td>ana.silva@gmail.com</td>
+            <td>(11) 91234-5678</td>
+            <td>São Paulo</td>
+            <td>2025-01-10</td>
+            <td>Ativo</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Bruno Souza</td>
+            <td>bruno.souza@outlook.com</td>
+            <td>(21) 98765-4321</td>
+            <td>Rio de Janeiro</td>
+            <td>2025-02-18</td>
+            <td>Pendente</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Arquivos do projeto</h2>
+      <ul>
+        <li>Dataset: dataset_pessoas_100k.csv</li>
+        <li>Script Python: pessoas.py</li>
+        <li>Banco PostgreSQL: postgres_setup.sql</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Testes de desempenho</h2>
+      <ol>
+        <li>Cenário A: 50% leitura e 50% escrita</li>
+        <li>Cenário B: 75% leitura e 25% escrita</li>
+        <li>Cenário C: 25% leitura e 75% escrita</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    <p>Projeto acadêmico de Sistemas Distribuídos.</p>
+  </footer>
+</body>
+</html>
