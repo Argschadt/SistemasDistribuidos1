@@ -147,50 +147,100 @@ fig.savefig(assets_dir / "chart_throughput.png")
 plt.close(fig)
 
 # -------------------------------------------------------------
-# Chart 5: Architecture Diagram
+# Chart 5: Architecture Diagram (Clean, No Overlap, High Contrast)
 # -------------------------------------------------------------
-fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
-ax.set_xlim(0, 10)
-ax.set_ylim(0, 5)
+fig, ax = plt.subplots(figsize=(11.5, 4.2), dpi=300)
+ax.set_xlim(0, 11.5)
+ax.set_ylim(0, 4.2)
 ax.axis('off')
 
-# Tier 1 Box: Clients
-rect_client = patches.FancyBboxPatch((0.5, 1.2), 2.3, 2.6, boxstyle="round,pad=0.2",
-                                     edgecolor='#2563eb', facecolor='#eff6ff', linewidth=2)
-ax.add_patch(rect_client)
-ax.text(1.65, 3.4, "CAMADA 1: CLIENTES", ha='center', va='center', fontsize=11, fontweight='bold', color='#1e40af')
-ax.text(1.65, 2.7, "Apache JMeter 5.6.3\n• 1200 Threads Totais\n• Ramp-up: 10s\n• Perfis: 50/50, 75/25, 25/75\n• Navegador Web (HTML/JS)",
-        ha='center', va='center', fontsize=8.5, color='#1e293b')
+def draw_tier_card(ax, x, y, w, h, header_color, bg_color, title, subtitle, bullets):
+    # Main card body
+    body = patches.FancyBboxPatch(
+        (x, y), w, h,
+        boxstyle="round,pad=0.08,rounding_size=0.15",
+        edgecolor=header_color, facecolor=bg_color, linewidth=1.8
+    )
+    ax.add_patch(body)
+    # Header bar
+    header_h = 0.68
+    header = patches.FancyBboxPatch(
+        (x, y + h - header_h), w, header_h,
+        boxstyle="round,pad=0.08,rounding_size=0.15",
+        edgecolor=header_color, facecolor=header_color, linewidth=1.0
+    )
+    ax.add_patch(header)
+    ax.text(x + w/2, y + h - header_h/2 + 0.08, title,
+            ha='center', va='center', fontsize=10.5, fontweight='bold', color='#ffffff')
+    ax.text(x + w/2, y + h - header_h/2 - 0.16, subtitle,
+            ha='center', va='center', fontsize=8.5, color='#e2e8f0')
 
-# Arrow 1: HTTP / REST
-ax.annotate('', xy=(3.6, 2.7), xytext=(2.9, 2.7),
-            arrowprops=dict(arrowstyle="<->", color='#3b82f6', lw=2.5))
-ax.text(3.25, 3.0, "HTTP / REST\nJSON / Form", ha='center', va='center', fontsize=8, fontweight='bold', color='#1e40af')
+    # Bullets
+    start_y = y + h - header_h - 0.32
+    for i, line in enumerate(bullets):
+        ax.text(x + 0.18, start_y - i * 0.36, line,
+                ha='left', va='center', fontsize=9, color='#1e293b', fontweight='medium')
 
-# Tier 2 Box: Web Server
-rect_server = patches.FancyBboxPatch((3.8, 1.2), 2.4, 2.6, boxstyle="round,pad=0.2",
-                                     edgecolor='#0d9488', facecolor='#f0fdfa', linewidth=2)
-ax.add_patch(rect_server)
-ax.text(5.0, 3.4, "CAMADA 2: SERVIDOR WEB", ha='center', va='center', fontsize=11, fontweight='bold', color='#0f766e')
-ax.text(5.0, 2.7, "Python 3.14 + Flask\n• Porta: 5000\n• Endpoints:\n  GET /api/pessoas\n  POST /api/pessoas\n• Renderizador Jinja2",
-        ha='center', va='center', fontsize=8.5, color='#1e293b')
+# Tier 1: Clientes
+draw_tier_card(
+    ax, 0.25, 0.45, 2.75, 3.1,
+    header_color='#1e3a8a', bg_color='#f8fafc',
+    title="1. CAMADA CLIENTE", subtitle="Apache JMeter 5.6.3",
+    bullets=[
+        "• 1.200 clientes simultâneos",
+        "• Ramp-up de 10 segundos",
+        "• Perfis: 50/50, 75/25, 25/75",
+        "• Interface Web / Navegador",
+        "• Disparo concorrente HTTP"
+    ]
+)
 
-# Arrow 2: TCP / SQL
-ax.annotate('', xy=(7.0, 2.7), xytext=(6.3, 2.7),
-            arrowprops=dict(arrowstyle="<->", color='#0d9488', lw=2.5))
-ax.text(6.65, 3.0, "TCP / 5432\npsycopg2 (SQL)", ha='center', va='center', fontsize=8, fontweight='bold', color='#0f766e')
+# Arrow 1: Client <-> Web Server
+ax.annotate('', xy=(4.32, 2.15), xytext=(3.18, 2.15),
+            arrowprops=dict(arrowstyle="-|>", color='#1e3a8a', lw=2.2, mutation_scale=16))
+ax.annotate('', xy=(3.18, 1.75), xytext=(4.32, 1.75),
+            arrowprops=dict(arrowstyle="-|>", color='#64748b', lw=1.8, linestyle='--', mutation_scale=14))
+ax.text(3.75, 2.52, "HTTP / REST", ha='center', va='center', fontsize=9, fontweight='bold', color='#1e3a8a')
+ax.text(3.75, 1.38, "JSON (Porta 5000)", ha='center', va='center', fontsize=8, color='#475569')
 
-# Tier 3 Box: Database
-rect_db = patches.FancyBboxPatch((7.2, 1.2), 2.3, 2.6, boxstyle="round,pad=0.2",
-                                 edgecolor='#7c3aed', facecolor='#f5f3ff', linewidth=2)
-ax.add_patch(rect_db)
-ax.text(8.35, 3.4, "CAMADA 3: BANCO DE DADOS", ha='center', va='center', fontsize=11, fontweight='bold', color='#6d28d9')
-ax.text(8.35, 2.7, "PostgreSQL 16\n• Tabela: public.pessoas\n• Datasets: 100k e 20k\n• Índices: B-Tree\n  (cidade, data, status)\n• Transações ACID / WAL",
-        ha='center', va='center', fontsize=8.5, color='#1e293b')
+# Tier 2: Servidor Web
+draw_tier_card(
+    ax, 4.45, 0.45, 2.75, 3.1,
+    header_color='#0d9488', bg_color='#f0fdfa',
+    title="2. SERVIDOR WEB", subtitle="Python 3.14 + Flask 3.1",
+    bullets=[
+        "• Leitura: GET /api/pessoas",
+        "• Escrita: POST /api/pessoas",
+        "• Driver psycopg2 (síncrono)",
+        "• 1 conexão por requisição",
+        "• Serialização JSON / Jinja2"
+    ]
+)
 
-ax.set_title("Arquitetura Distribuída em 3 Camadas da Solução CRUD", fontsize=13, fontweight='bold', pad=10, color='#0f172a')
+# Arrow 2: Web Server <-> Database
+ax.annotate('', xy=(8.52, 2.15), xytext=(7.38, 2.15),
+            arrowprops=dict(arrowstyle="-|>", color='#0d9488', lw=2.2, mutation_scale=16))
+ax.annotate('', xy=(7.38, 1.75), xytext=(8.52, 1.75),
+            arrowprops=dict(arrowstyle="-|>", color='#64748b', lw=1.8, linestyle='--', mutation_scale=14))
+ax.text(7.95, 2.52, "TCP / SQL", ha='center', va='center', fontsize=9, fontweight='bold', color='#0f766e')
+ax.text(7.95, 1.38, "psycopg2 (Porta 5432)", ha='center', va='center', fontsize=8, color='#475569')
+
+# Tier 3: Banco de Dados
+draw_tier_card(
+    ax, 8.65, 0.45, 2.6, 3.1,
+    header_color='#334155', bg_color='#f8fafc',
+    title="3. BANCO DE DADOS", subtitle="PostgreSQL 16",
+    bullets=[
+        "• Tabela: public.pessoas",
+        "• Bases: 100k e 20k linhas",
+        "• Índices B-Tree secundários",
+        "• (cidade, data, status)",
+        "• Transações ACID e WAL"
+    ]
+)
+
 plt.tight_layout()
-fig.savefig(assets_dir / "diagrama_arquitetura.png")
+fig.savefig(assets_dir / "diagrama_arquitetura.png", bbox_inches='tight', pad_inches=0.12)
 plt.close(fig)
 
 print("Gráficos gerados com sucesso na pasta 'assets'!")

@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Apresentação — Sistemas Distribuídos 1</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    @page {
+      size: 338.67mm 190.5mm; /* 16:9 widescreen exato */
+      margin: 0;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      background: #0f172a;
+      color: #1e293b;
+    }
+
+    .slide {
+      width: 338.67mm;
+      height: 190.5mm;
+      background: #f8fafc;
+      position: relative;
+      overflow: hidden;
+      page-break-after: always;
+      break-after: page;
+      display: flex;
+      flex-direction: column;
+      padding: 14mm 18mm 12mm 18mm;
+      margin: 0 auto;
+    }
+
+    @media screen {
+      body {
+        padding: 20px 0;
+      }
+      .slide {
+        margin-bottom: 24px;
+        box-shadow: 0 12px 32px rgba(0,0,0,0.45);
+        border-radius: 6px;
+      }
+    }
+
+    .top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4mm;
+      background: linear-gradient(90deg, #1e3a8a 0%, #0d9488 100%);
+    }
+
+    /* Slide de Capa */
+    .slide-cover {
+      background: #0f172a;
+      color: #ffffff;
+      justify-content: center;
+      padding-left: 26mm;
+    }
+    .cover-accent {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 9mm;
+      background: #0d9488;
+    }
+    .cover-tag {
+      font-size: 13pt;
+      font-weight: 700;
+      color: #5eead4;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .cover-title {
+      font-size: 34pt;
+      font-weight: 800;
+      line-height: 1.18;
+      color: #ffffff;
+      margin: 0 0 18px 0;
+      max-width: 260mm;
+    }
+    .cover-sub {
+      font-size: 16pt;
+      color: #cbd5e1;
+      line-height: 1.45;
+      margin: 0 0 36px 0;
+      max-width: 250mm;
+    }
+    .cover-footer {
+      font-size: 13.5pt;
+      color: #f8fafc;
+      font-weight: 500;
+      border-top: 1px solid #334155;
+      padding-top: 16px;
+      display: inline-block;
+      width: 220mm;
+    }
+
+    /* Cabeçalho padrão */
+    .slide-header {
+      border-bottom: 1.5px solid #cbd5e1;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+    }
+    .slide-header h2 {
+      margin: 0;
+      font-size: 22pt;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .slide-header p {
+      margin: 4px 0 0 0;
+      font-size: 12pt;
+      color: #64748b;
+    }
+
+    /* Rodapé padrão */
+    .slide-footer {
+      position: absolute;
+      bottom: 5mm;
+      left: 18mm;
+      right: 18mm;
+      display: flex;
+      justify-content: space-between;
+      font-size: 9.5pt;
+      color: #64748b;
+    }
+
+    /* Grids e Cards */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      flex: 1;
+      align-items: stretch;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      flex: 1;
+      align-items: stretch;
+    }
+    .col-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    .card.navy {
+      border-color: #1e3a8a;
+      background: #eff6ff;
+    }
+    .card.teal {
+      border-color: #0d9488;
+      background: #f0fdfa;
+    }
+    .card.amber {
+      border-color: #f59e0b;
+      background: #fffbeb;
+    }
+
+    .card h3 {
+      margin: 0 0 10px 0;
+      font-size: 15pt;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+    .card.teal h3 { color: #0f766e; }
+    .card.amber h3 { color: #b45309; }
+
+    .card ul {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 12.5pt;
+      line-height: 1.52;
+      color: #1e293b;
+    }
+    .card li {
+      margin-bottom: 6px;
+    }
+    .card p {
+      margin: 0 0 8px 0;
+      font-size: 12.5pt;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: #e2e8f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11pt;
+      color: #0f172a;
+    }
+
+    .code-block {
+      font-family: 'JetBrains Mono', monospace;
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 10.5pt;
+      line-height: 1.45;
+      margin-top: 8px;
+    }
+
+    /* Tabela de Resultados */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11pt;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th {
+      background: #1e3a8a;
+      color: #ffffff;
+      padding: 9px 10px;
+      font-weight: 700;
+      text-align: center;
+      border: 1px solid #1e3a8a;
+    }
+    th:first-child, th:nth-child(2) { text-align: left; }
+    td {
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      text-align: center;
+      color: #1e293b;
+    }
+    td:first-child, td:nth-child(2) { text-align: left; font-weight: 600; }
+    .grp-20k td { background: #f0fdfa; }
+    .grp-sem td { background: #eff6ff; }
+    .bold-val { font-weight: 700; color: #0f172a; }
+
+    .img-box {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .img-box img {
+      max-width: 100%;
+      max-height: 92mm;
+      object-fit: contain;
+    }
+    .img-box span {
+      font-size: 9.5pt;
+      color: #64748b;
+      margin-top: 6px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SLIDE 1: CAPA -->
+  <section class="slide slide-cover">
+    <div class="cover-accent"></div>
+    <div class="cover-tag">Sistemas Distribuídos 1 — Trabalho Prático 1</div>
+    <h1 class="cover-title">Avaliação de Desempenho de uma Aplicação CRUD sob Carga Concorrente</h1>
+    <p class="cover-sub">
+      Análise experimental com Python (Flask), PostgreSQL e Apache JMeter<br>
+      Cenários de Leitura e Escrita, Redução de Dataset (100k vs. 20k) e Impacto de Índices
+    </p>
+    <div class="cover-footer">
+      Aluno: ____________________ &nbsp;&nbsp;|&nbsp;&nbsp; Outubro de 2026
+    </div>
+  </section>
+
+  <!-- SLIDE 2: OBJETIVO E ESCOPO -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <div class="slide-header">
+      <h2>1. Objetivo e Escopo do Trabalho</h2>
+      <p>O que foi proposto no enunciado da disciplina</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Parte 1 — Projeto e Implementação</h3>
+        <ul>
+          <li>Implementar uma aplicação <strong>CRUD completa</strong> envolvendo Clientes, Servidor Web e Banco de Dados.</li>
+          <li>Popular o banco com um dataset de pelo menos <strong>50.000 registros</strong> (utilizamos <strong>100.000 registros</strong>).</li>
+          <li>Projetar a arquitetura da solução em camadas.</li>
+          <li>Simular múltiplos clientes simultâneos utilizando o <strong>Apache JMeter</strong>.</li>
+        </ul>
+      </div>
+      <div class="card teal">
+        <h3>Parte 2 — Experimentos e Questões</h3>
+        <ul>
+          <li>Avaliar o desempenho nos <strong>3 cenários de carga</strong>:
+            <ul>
+              <li><strong>Cenário A:</strong> 50% Leituras / 50% Escritas</li>
+              <li><strong>Cenário B:</strong> 75% Leituras / 25% Escritas</li>
+              <li><strong>Cenário C:</strong> 25% Leituras / 75% Escritas</li>
+            </ul>
+          </li>
+          <li>Investigar e responder <strong>3 questões práticas</strong>:
+            <ol>
+              <li>O que ocorre ao reduzir o dataset para <strong>20k registros</strong>?</li>
+              <li>Qual o efeito de adicionar <strong>índices no BD</strong>? Qual escolher?</li>
+              <li>Como a escolha entre <strong>SQL e NoSQL</strong> impacta o sistema?</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Sistemas Distribuídos 1 • Avaliação de Desempenho CRUD</span>
+      <span>2 / 12</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: APLICAÇÃO DESENVOLVIDA -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <div class="slide-header">
+      <h2>2. A Aplicação Desenvolvida (CRUD)</h2>
+      <p>Sistema Web e API REST de cadastro de pessoas em Python Flask + PostgreSQL</p>
+    </div>
+    <div class="grid-2">
+      <div class="col-stack">
+        <div class="card" style="flex:1;">
+          <h3>Modelo de Dados (<code>public.pessoas</code>)</h3>
+          <ul>
+            <li><code>id</code> — Chave primária (<code>INTEGER PRIMARY KEY</code>)</li>
+            <li><code>nome</code> e <code>email</code> — Campos obrigatórios</li>
+            <li><code>telefone</code> e <code>cidade</code> — Dados de contato/localização</li>
+            <li><code>data_cadastro</code> (<code>DATE</code>) e <code>status</code> (<em>ativo, inativo, pendente, bloqueado</em>)</li>
+          </ul>
+        </div>
+        <div class="card navy" style="flex:1;">
+          <h3>Geração de Dados (<code>pessoas.py</code>)</h3>
+          <ul>
+            <li>Script Python gerador de registros sintéticos realistas.</li>
+            <li><strong>Base Principal:</strong> 100.000 registros importados via <code>\copy</code>.</li>
+            <li><strong>Base Reduzida:</strong> 20.000 registros para comparação.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card teal">
+        <h3>Endpoints Utilizados nos Testes</h3>
+        <ul>
+          <li><strong>Operação de Leitura:</strong> <code>GET /api/pessoas</code>
+            <ul>
+              <li>Retorna os 100 registros mais recentes em JSON (<code>ORDER BY id DESC LIMIT 100</code>).</li>
+              <li>Aceita busca textual opcional via <code>?q=termo</code> (com <code>ILIKE '%termo%'</code>).</li>
+            </ul>
+          </li>
+          <li style="margin-top:10px;"><strong>Operação de Escrita:</strong> <code>POST /api/pessoas</code>
+            <ul>
+              <li>Recebe JSON com os dados de uma nova pessoa.</li>
+              <li>Executa <code>INSERT INTO public.pessoas ... RETURNING id</code> com commit imediato (HTTP 201).</li>
+            </ul>
+          </li>
+          <li style="margin-top:10px;">A aplicação também conta com interface HTML e rotas de edição (<code>UPDATE</code>) e exclusão (<code>DELETE</code>).</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Sistemas Distribuídos 1 • Avaliação de Desempenho CRUD</span>
+      <span>3 / 12</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: ARQUITETURA DA SOLUÇÃO -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <div class="slide-header">
+      <h2>3. Arquitetura da Solução</h2>
+      <p>Organização cliente-servidor em 3 camadas e fluxo de comunicação</p>
+    </div>
+
+    <!-- Diagrama Vetorial Nativo em 3 Camadas -->
+    <div style="display: grid; grid-template-columns: 1fr 120px 1fr 120px 1fr; align-items: stretch; flex: 1; margin-bottom: 14px;">
+      
+      <!-- Camada 1 -->
+      <div class="card" style="padding: 0; overflow: hidden; border: 2px solid #1e3a8a;">
+        <div style="background: #1e3a8a; color: white; padding: 12px 16px; text-align: center;">
+          <div style="font-size: 10pt; font-weight: 700; letter-spacing: 1px; color: #93c5fd;">CAMADA 1</div>
+          <div style="font-size: 15pt; font-weight: 800; margin-top: 2px;">Clientes (Carga)</div>
+          <div style="font-size: 10.5pt; color: #e2e8f0; margin-top: 2px;">Apache JMeter 5.6.3 / Browser</div>
+        </div>
+        <div style="padding: 16px 18px;">
+          <ul>
+            <li><strong>1.200 clientes simultâneos</strong> disparando requisições concorrentes.</li>
+            <li><strong>Ramp-up:</strong> 10 segundos.</li>
+            <li>Simula os 3 perfis de tráfego:<br><strong>50/50</strong>, <strong>75/25</strong> e <strong>25/75</strong> (Leitura/Escrita).</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Seta 1 -->
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 6px; text-align: center;">
+        <div style="font-size: 9.5pt; font-weight: 700; color: #1e3a8a; background: #dbeafe; padding: 4px 8px; border-radius: 6px; border: 1px solid #93c5fd; margin-bottom: 6px;">
+          HTTP / REST
+        </div>
+        <div style="font-size: 22pt; font-weight: 800; color: #1e3a8a; line-height: 1;">⇄</div>
+        <div style="font-size: 8.5pt; color: #475569; margin-top: 6px; font-family: 'JetBrains Mono', monospace;">
+          JSON<br>Porta 5000
+        </div>
+      </div>
+
+      <!-- Camada 2 -->
+      <div class="card" style="padding: 0; overflow: hidden; border: 2px solid #0d9488; background: #f0fdfa;">
+        <div style="background: #0d9488; color: white; padding: 12px 16px; text-align: center;">
+          <div style="font-size: 10pt; font-weight: 700; letter-spacing: 1px; color: #99f6e4;">CAMADA 2</div>
+          <div style="font-size: 15pt; font-weight: 800; margin-top: 2px;">Servidor Web / API</div>
+          <div style="font-size: 10.5pt; color: #ccfbf1; margin-top: 2px;">Python 3.14 + Flask 3.1.3</div>
+        </div>
+        <div style="padding: 16px 18px;">
+          <ul>
+            <li><strong>Leitura:</strong> <code>GET /api/pessoas</code></li>
+            <li><strong>Escrita:</strong> <code>POST /api/pessoas</code></li>
+            <li><strong>Comunicação Síncrona:</strong> abre e fecha 1 conexão por requisição via <code>psycopg2</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Seta 2 -->
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 6px; text-align: center;">
+        <div style="font-size: 9.5pt; font-weight: 700; color: #0f766e; background: #ccfbf1; padding: 4px 8px; border-radius: 6px; border: 1px solid #5eead4; margin-bottom: 6px;">
+          TCP / SQL
+        </div>
+        <div style="font-size: 22pt; font-weight: 800; color: #0d9488; line-height: 1;">⇄</div>
+        <div style="font-size: 8.5pt; color: #475569; margin-top: 6px; font-family: 'JetBrains Mono', monospace;">
+          psycopg2<br>Porta 5432
+        </div>
+      </div>
+
+      <!-- Camada 3 -->
+      <div class="card" style="padding: 0; overflow: hidden; border: 2px solid #334155;">
+        <div style="background: #334155; color: white; padding: 12px 16px; text-align: center;">
+          <div style="font-size: 10pt; font-weight: 700; letter-spacing: 1px; color: #cbd5e1;">CAMADA 3</div>
+          <div style="font-size: 15pt; font-weight: 800; margin-top: 2px;">Banco de Dados</div>
+          <div style="font-size: 10.5pt; color: #e2e8f0; margin-top: 2px;">PostgreSQL 16</div>
+        </div>
+        <div style="padding: 16px 18px;">
+          <ul>
+            <li>Tabela relacional <code>public.pessoas</code>.</li>
+            <li><strong>Datasets testados:</strong> 100.000 e 20.000 registros.</li>
+            <li><strong>Índices B-Tree:</strong> <code>cidade</code>, <code>data_cadastro</code> e <code>status</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Fluxo Resumido na Base -->
+    <div class="card navy" style="padding: 11px 18px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; font-size: 10.5pt;">
+      <span><strong>Fluxo da Requisição:</strong></span>
+      <span>1. JMeter envia HTTP (<code>GET</code>/<code>POST</code>)</span>
+      <span style="color:#1e3a8a; font-weight:800;">➔</span>
+      <span>2. Flask abre conexão no PostgreSQL</span>
+      <span style="color:#1e3a8a; font-weight:800;">➔</span>
+      <span>3. Banco executa SQL (<code>SELECT</code>/<code>INSERT</code>)</span>
+      <span style="color:#1e3a8a; font-weight:800;">➔</span>
+      <span>4. Flask retorna JSON</span>
+    </div>
+
+    <div class="slide-footer">
+      <span>Sistemas Distribuídos 1 • Avaliação de Desempenho CRUD</span>
+      <span>4 / 12</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: METODOLOGIA E CENÁRIOS -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <div class="slide-header">
+      <h2>4. Metodologia e Cenários de Teste</h2>
+      <p>9 baterias executadas no total (10.800 requisições analisadas)</p>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Carga no JMeter</h3>
+        <ul>
+          <li><strong>1.200 clientes simultâneos</strong> (threads) em cada bateria.</li>
+          <li><strong>Ramp-up:</strong> 10 segundos.</li>
+          <li>1 requisição por cliente (1.200 requisições por bateria).</li>
+          <li><strong>Métricas avaliadas:</strong>
+            <ul>
+              <li>Taxa de Erro (%)</li>
+              <li>Tempo Médio (ms)</li>
+              <li>Percentil 95 / P95 (ms)</li>
+              <li>Vazão / Throughput (req/s)</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="card navy">
+        <h3>3 Proporções de Leitura/Escrita</h3>
+        <ul>
+          <li><strong>Cenário A (50% L / 50% E):</strong><br>600 leituras + 600 escritas</li>
+          <li style="margin-top:10px;"><strong>Cenário B (75% L / 25% E):</strong><br>900 leituras + 300 escritas</li>
+          <li style="margin-top:10px;"><strong>Cenário C (25% L / 75% E):</strong><br>300 leituras + 900 escritas</li>
+        </ul>
+      </div>
+      <div class="card teal">
+        <h3>3 Variações do Banco</h3>
+        <ul>
+          <li><strong>Variação 1:</strong><br>100.000 registros <strong>com índices</strong> B-Tree secundários</li>
+          <li style="margin-top:10px;"><strong>Variação 2:</strong><br>20.000 registros <strong>com índices</strong> B-Tree secundários</li>
+          <li style="margin-top:10px;"><strong>Variação 3:</strong><br>100.000 registros <strong>sem índices</strong> secundários (apenas PK)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Sistemas Distribuídos 1 • Avaliação de Desempenho CRUD</span>
+      <span>5 / 12</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: RESULTADOS CONSOLIDADOS -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <div class="slide-header">
+      <h2>5. Resultados Consolidados (9 Baterias)</h2>
+      <p>Dados extraídos dos relatórios do Apache JMeter</p>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Configuração do BD</th>
+          <th>Cenário</th>
+          <th>Erro Leitura</th>
+          <th>Erro Escrita</th>
+          <th>Erro Total</th>
+          <th>Tempo Médio</th>
+          <th>Latência P95</th>
+          <th>Vazão (req/s)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>100k com índice</td>
+          <td>A (50% L / 50% E)</td>
+          <td>10,00%</td>
+          <td>10,67%</td>
+          <td class="bold-val">10,33%</td>
+          <td>1.120 ms</td>
+          <td>1.613 ms</td>
+          <td class="bold-val">106,17 req/s</td>
+        </tr>
+        <tr>
+          <td>100k com índice</td>
+          <td>B (75% L / 25% E)</td>
+          <td>14,11%</td>
+          <td>14,67%</td>
+          <td class="bold-val">14,25%</td>
+          <td>1.066 ms</td>
+          <td>1.569 ms</td>
+          <td class="bold-val">109,73 req/s</td>
+        </tr>
+        <tr>
+          <td>100k com índice</td>
+          <td>C (25% L / 75% E)</td>
+          <td>6,67%</td>
+          <td>7,33%</td>
+          <td class="bold-val">7,17%</td>
+          <td>1.089 ms</td>
+          <td>1.525 ms</td>
+          <td class="bold-val">107,85 req/s</td>
+        </tr>
+        <tr class="grp-20k">
+          <td>20k com índice</td>
+          <td>A (50% L / 50% E)</td>
+          <td>7,33%</td>
+          <td>9,50%</td>
+          <td class="bold-val">8,42%</td>
+          <td>1.057 ms</td>
+          <td>1.609 ms</td>
+          <td class="bold-val">105,13 req/s</td>
+        </tr>
+        <tr class="grp-20k">
+          <td>20k com índice</td>
+          <td>B (75% L / 25% E)</td>
+          <td>10,44%</td>
+          <td>10,00%</td>
+          <td class="bold-val">10,33%</td>
+          <td>1.058 ms</td>
+          <td>1.540 ms</td>
+          <td class="bold-val">108,30 req/s</td>
+        </tr>
+        <tr class="grp-20k">
+          <td>20k com índice</td>
+          <td>C (25% L / 75% E)</td>
+          <td>4,00%</td>
+          <td>3,89%</td>
+          <td class="bold-val">3,92%</td>
+          <td>1.013 ms</td>
+          <td>1.439 ms</td>
+          <td class="bold-val">107,58 req/s</td>
+        </tr>
+        <tr class="grp-sem">
+          <td>100k sem índice</td>
+          <td>A (50% L / 50% E)</td>
+          <td>7,00%</td>
+          <td>6,83%</td>
+          <td class="bold-val">6,92%</td>
+          <td>1.092 ms</td>
+          <td>1.571 ms</td>
+          <td class="bold-val">105,03 req/s</td>
+        </tr>
+        <tr class="grp-sem">
+          <td>100k sem índice</td>
+          <td>B (75% L / 25% E)</td>
+          <td>10,00%</td>
+          <td>9,33%</td>
+          <td class="bold-val">9,83%</td>
+          <td>1.060 ms</td>
+          <td>1.521 ms</td>
+          <td class="bold-val">109,00 req/s</td>
+        </tr>
+        <tr class="grp-sem">
+          <td>100k sem índice</td>
+          <td>C (25% L / 75% E)</td>
+          <td>8,00%</td>
+          <td>6,44%</td>
+          <td class="bold-val">6,83%</td>
+          <td>1.059 ms</td>
+          <td>1.514 ms</td>
+          <td class="bold-val">108,03 req/s</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="slide-footer">
+      <span>Sistemas Distribuídos 1 • Avaliação de Desempenho CRUD</span>
+      <span>6 / 12</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: VISÃO GRÁFICA ERROS E LATÊNCIA -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <div class="slide-header">
+      <h2>6. Comparativo Gráfico: Taxa de Erros e Latência Média</h2>
+      <p>Comportamento dos 3 perfis de carga nas 3 configurações de banco</p>
+    </div>
+    <div class="grid-2" style="margin-bottom: 12px;">
+      <div class="img-box">
+        <img src="assets/chart_taxa_erros.png" alt="Taxa de Erros">
+      </div>
+      <div class="img-box">
+        <img src="assets/chart_latencia_media.png" alt="Latência Média">
+      </div>
+    </div>
+    <div class="card navy" style="padding: 12px 18px;">
+      <ul>
+        <li><strong>Taxa de Erros:</strong> O cenário <strong>B (75% Leitura)</strong> teve mais erros porque cada leitura serializa e retorna 100 registros em JSON, enquanto o cenário <strong>C (75% Escrita)</strong> insere apenas 1 linha por vez.</li>
+        <li><strong>Tempo Médio:</strong> Permaneceu próximo de <strong>1,01 s a 1,12 s</strong> em todas as execuções.</li>
+      </ul>
+    </div>
+    <div class="slide-footer">
+      <span>Sistemas Distribuídos 1 • Avaliação de Desempenho CRUD</span>
+      <span>7 / 12</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 8: GARGALO DE VAZÃO (~107 REQ/S) -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <div class="slide-header">
+      <h2>7. Por que a Vazão travou em ~107 req/s em todos os cenários?</h2>
+      <p>Identificação do gargalo principal da arquitetura</p>
+    </div>
+    <div class="grid-2">
+      <div class="img-box">
+        <img src="assets/chart_throughput.png" alt="Throughput">
+        <span>A vazão ficou entre 105 e 110 req/s em todas as 9 baterias</span>
+      </div>
+      <div class="card amber">
+        <h3>O Gargalo está na Camada de Aplicação</h3>
+        <ul>
+          <li><strong>O que os dados mostram:</strong> Mesmo reduzindo o banco de 100k para 20k ou removendo índices, a vazão não passou de ~110 req/s.</li>
+          <li style="margin-top:8px;"><strong>Por que isso aconteceu?</strong>
+            <ol>
+              <li>O Flask rodou com <code>threaded=True</code> (1 processo criando 1 thread por requisição, com I/O síncrono/bloqueante).</li>
+              <li>Cada thread executa <code>psycopg2.connect()</code> — abrindo uma conexão TCP nova com o banco (sem pool).</li>
+              <li>Quando mais de 100 threads tentam conectar ao mesmo tempo, batem no limite do PostgreSQL (<code>max_connections = 100</code>).</li>
+            </ol>
+          </li>
+          <li style="margin-top:8px;"><strong>Resultado:</strong> Quando as 1.200 requisições chegavam juntas, cerca de 105–110 eram atendidas por segundo e o excedente sofria fila ou erro 500.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Sistemas Distribuídos 1 • Avaliação de Desempenho CRUD</span>
+      <span>8 / 12</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 9: PERGUNTA 1 (20K REGISTROS) -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <div class="slide-header">
+      <h2>8. Pergunta 1: Redução do Dataset para 20k Registros</h2>
+      <p>O que aconteceria com o desempenho se o dataset fosse reduzido de 100k para 20k?</p>
+    </div>
+    <div class="grid-2">
+      <div class="card teal">
+        <h3>Comparativo nos Testes (100k vs. 20k)</h3>
+        <ul>
+          <li><strong>Cenário A (50% L / 50% E):</strong>
+            <ul>
+              <li>Erro total caiu de <strong>10,33% → 8,42%</strong></li>
+              <li>Tempo médio caiu de <strong>1.120 ms → 1.057 ms</strong></li>
+            </ul>
+          </li>
+          <li style="margin-top:10px;"><strong>Cenário B (75% L / 25% E):</strong>
+            <ul>
+              <li>Erro total caiu de <strong>14,25% → 10,33%</strong></li>
+              <li>Tempo médio caiu de <strong>1.066 ms → 1.058 ms</strong></li>
+            </ul>
+          </li>
+          <li style="margin-top:10px;"><strong>Cenário C (25% L / 75% E):</strong>
+            <ul>
+              <li>Erro total caiu de <strong>7,17% → 3,92%</strong> (quase metade!)</li>
+              <li>Tempo médio caiu de <strong>1.089 ms → 1.013 ms</strong></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Explicação Técnica</h3>
+        <ul>
+          <li><strong>Dados em Memória RAM (Cache):</strong> Com 20.000 registros (base 5x menor), a tabela e os índices cabem com folga no cache de memória do PostgreSQL (<code>shared_buffers</code>).</li>
+          <li style="margin-top:10px;"><strong>Menos Acesso a Disco:</strong> As consultas e inserções exigem menos I/O de disco, terminando mais rápido e reduzindo os erros por timeout.</li>
+          <li style="margin-top:10px;"><strong>Por que a vazão continuou em ~107 req/s?</strong> Porque a vazão máxima era limitada pela criação de conexões no servidor web Flask, e não pelo tamanho da tabela.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Sistemas Distribuídos 1 • Avaliação de Desempenho CRUD</span>
+      <span>9 / 12</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 10: PERGUNTA 2 (ÍNDICES) -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <div class="slide-header">
+      <h2>9. Pergunta 2: Adição de Índices no Banco de Dados</h2>
+      <p>O que aconteceu com os índices? Qual índice escolher? O desempenho melhora?</p>
+    </div>
+    <div class="grid-3">
+      <div class="card amber">
+        <h3>1. Resultado Obtido</h3>
+        <ul>
+          <li>Criamos índices B-Tree em <code>cidade</code>, <code>data_cadastro</code> e <code>status</code>.</li>
+          <li style="margin-top:8px;"><strong>100k Com vs. Sem Índice:</strong>
+            <ul>
+              <li><strong>A (50/50):</strong> 10,33% vs. 6,92%</li>
+              <li><strong>B (75/25):</strong> 14,25% vs. 9,83%</li>
+              <li><strong>C (25/75):</strong> 7,17% vs. 6,83%</li>
+            </ul>
+          </li>
+          <li style="margin-top:8px;">Na prática, a base <strong>com índices teve mais erros</strong> em todos os cenários!</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>2. Por que isso ocorreu?</h3>
+        <ul>
+          <li><strong>Leitura sem ganho:</strong> O JMeter enviava <code>?cidade=Manaus</code>, mas a API lia <code>?q=</code>. A consulta executada não filtrava por cidade. Além disso, a busca por <code>?q=</code> usa <code>ILIKE '%termo%'</code>, que ignora árvores B-Tree.</li>
+          <li style="margin-top:8px;"><strong>Escrita mais pesada:</strong> Cada <code>INSERT</code> precisava atualizar a tabela + 3 índices B-Tree + log WAL em disco, aumentando a contenção.</li>
+        </ul>
+      </div>
+      <div class="card teal">
+        <h3>3. Qual índice escolher?</h3>
+        <ul>
+          <li><strong>Para filtro exato de cidade:</strong> Ajustar a API para <code>WHERE cidade = %s</code> e usar índice <strong>B-Tree</strong> em <code>cidade</code>.</li>
+          <li style="margin-top:8px;"><strong>Para busca parcial (<code>ILIKE '%termo%'</code>):</strong> Usar índice <strong>GIN com trigramas</strong> (<code>pg_trgm</code>):</li>
+        </ul>
+        <div class="code-block">
+CREATE EXTENSION pg_trgm;<br>
+CREATE INDEX idx_nome_gin<br>
+ON pessoas USING gin<br>
+(nome gin_trgm_ops);
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Sistemas Distribuídos 1 • Avaliação de Desempenho CRUD</span>
+      <span>10 / 12</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 11: PERGUNTA 3 (SQL VS NOSQL) -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <div class="slide-header">
+      <h2>10. Pergunta 3: Impacto da Escolha do BD (SQL vs. NoSQL)</h2>
+      <p>Como a escolha entre um banco relacional e não-relacional afeta o sistema?</p>
+    </div>
+    <div class="grid-2" style="margin-bottom: 14px;">
+      <div class="card navy">
+        <h3>Banco Relacional — SQL (PostgreSQL)</h3>
+        <ul>
+          <li><strong>Forte Consistência (ACID):</strong> Garante integridade total em cada transação.</li>
+          <li><strong>Esquema Fixo:</strong> Padroniza os campos do cadastro de pessoas.</li>
+          <li><strong>Custo sob Concorrência:</strong> Controle de locks, transações e índices aumenta a latência em picos de escrita.</li>
+          <li><strong>Escalabilidade Vertical:</strong> Escala principalmente aumentando CPU, RAM e disco do servidor.</li>
+        </ul>
+      </div>
+      <div class="card teal">
+        <h3>Banco Não-Relacional — NoSQL (MongoDB / Cassandra)</h3>
+        <ul>
+          <li><strong>Alta Vazão de Escrita:</strong> Inserções rápidas sem sobrecarga de joins ou constraints relacionais.</li>
+          <li><strong>Escalabilidade Horizontal:</strong> Facilidade nativa para distribuir dados entre vários servidores (<em>sharding</em>).</li>
+          <li><strong>Esquema Flexível:</strong> Armazena documentos JSON diretamente.</li>
+          <li><strong>Trade-off:</strong> Geralmente adota <em>consistência eventual</em> em vez de ACID rígido.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="padding: 12px 18px;">
+      <p style="margin:0;"><strong>Conclusão para o nosso sistema:</strong> O <strong>PostgreSQL (SQL)</strong> atende muito bem um cadastro estruturado de pessoas na faixa de 100k registros. Um banco <strong>NoSQL</strong> seria vantajoso se a aplicação precisasse absorver milhares de escritas por segundo distribuídas em múltiplos nós.</p>
+    </div>
+    <div class="slide-footer">
+      <span>Sistemas Distribuídos 1 • Avaliação de Desempenho CRUD</span>
+      <span>11 / 12</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 12: CONCLUSÃO E MELHORIAS -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <div class="slide-header">
+      <h2>11. Conclusão e Melhorias Futuras</h2>
+      <p>Principais aprendizados práticos do trabalho</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Síntese dos Resultados</h3>
+        <ul>
+          <li><strong>Vazão (~107 req/s):</strong> O limite de throughput foi definido pela camada de aplicação (conexões síncronas por requisição no Flask), e não pelo PostgreSQL.</li>
+          <li style="margin-top:10px;"><strong>Dataset Menor (20k):</strong> Reduziu os erros em todos os cenários (chegando a <strong>3,92%</strong> no perfil 25L/75E) por manter os dados em memória RAM.</li>
+          <li style="margin-top:10px;"><strong>Uso Consciente de Índices:</strong> Índices B-Tree que não casam com o filtro da query não aceleram a leitura e ainda penalizam a escrita.</li>
+        </ul>
+      </div>
+      <div class="card teal">
+        <h3>Como Escalar a Arquitetura?</h3>
+        <ul>
+          <li><strong>1. Pool de Conexões (Connection Pool):</strong><br>Utilizar <code>PgBouncer</code> ou <code>ThreadedConnectionPool</code> para reutilizar conexões abertas em vez de conectar a cada requisição.</li>
+          <li style="margin-top:10px;"><strong>2. Servidor de Produção Assíncrono:</strong><br>Executar a aplicação com <strong>Gunicorn</strong> (múltiplos workers) ou migrar para I/O assíncrono.</li>
+          <li style="margin-top:10px;"><strong>3. Sintonia entre API e Índices:</strong><br>Aplicar <code>WHERE cidade = %s</code> para aproveitar o B-Tree ou criar índice <strong>GIN (<code>pg_trgm</code>)</strong> para buscas com <code>ILIKE</code>.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Sistemas Distribuídos 1 • Avaliação de Desempenho CRUD</span>
+      <span>12 / 12</span>
+    </div>
+  </section>
+
+</body>
+</html>
