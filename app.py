@@ -276,8 +276,8 @@ def api_delete_person(person_id):
 
 @app.route("/saude")
 def health_check():
-    return {"status": "ok"}
+    return {"status": "ok", "replica_port": os.getenv("PORT", "5000")}
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", "5000")), debug=True, threaded=True)
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", "5000")), debug=False, threaded=True)
