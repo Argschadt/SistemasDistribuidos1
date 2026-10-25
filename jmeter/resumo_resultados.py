@@ -49,7 +49,7 @@ def main():
         with open(stats_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
-        for key, display in [("Total", label), ("Leitura Home", "  -> Leitura (GET)"), ("Escrita", "  -> Escrita (POST)")]:
+        for key, display in [("Total", label), ("Leitura Home", "  -> Leitura (GET)"), ("Escrita Pessoa", "  -> Escrita (POST)")]:
             if key not in data:
                 continue
             m = data[key]

@@ -34,14 +34,17 @@ def get_connection():
     return psycopg2.connect(**DB_CONFIG)
 
 
-def fetch_people(search_term=None, limit=100):
+def fetch_people(search_term=None, cidade=None, limit=100):
     base_query = """
         SELECT id, nome, email, telefone, cidade, data_cadastro, status
         FROM public.pessoas
     """
     params = []
 
-    if search_term:
+    if cidade:
+        base_query += " WHERE cidade = %s ORDER BY data_cadastro DESC, id DESC LIMIT %s"
+        params.extend([cidade, limit])
+    elif search_term:
         like_term = f"%{search_term}%"
         base_query += """
             WHERE CAST(id AS TEXT) ILIKE %s
@@ -50,11 +53,12 @@ def fetch_people(search_term=None, limit=100):
                OR COALESCE(telefone, '') ILIKE %s
                OR COALESCE(cidade, '') ILIKE %s
                OR COALESCE(status, '') ILIKE %s
+            ORDER BY id DESC LIMIT %s
         """
-        params.extend([like_term] * 6)
-
-    base_query += " ORDER BY id DESC LIMIT %s"
-    params.append(limit)
+        params.extend([like_term] * 6 + [limit])
+    else:
+        base_query += " ORDER BY id DESC LIMIT %s"
+        params.append(limit)
 
     with get_connection() as connection:
         with connection.cursor(cursor_factory=RealDictCursor) as cursor:
@@ -132,6 +136,7 @@ def index():
 @app.route("/api/pessoas", methods=["GET"])
 def api_list_people():
     search = request.args.get("q", "").strip()
+    cidade = request.args.get("cidade", "").strip()
     limit = request.args.get("limit", "100").strip()
 
     try:
@@ -140,7 +145,11 @@ def api_list_people():
         limit_value = 100
 
     try:
-        people = fetch_people(search_term=search or None, limit=limit_value)
+        people = fetch_people(
+            search_term=search or None,
+            cidade=cidade or None,
+            limit=limit_value,
+        )
         return jsonify(
             {
                 "count": len(people),

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini Relatório de Análise — Nova Bateria JMeter</title>
+  <style>
+    @page { size: A4; margin: 18mm 15mm; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.45;
+      color: #1e293b;
+      max-width: 190mm;
+      margin: 0 auto;
+    }
+    h1 { font-size: 15pt; color: #0f172a; margin: 0 0 4px; border-bottom: 2px solid #1e3a8a; padding-bottom: 6px; }
+    .sub { font-size: 9.5pt; color: #64748b; margin-bottom: 14px; }
+    h2 { font-size: 11.5pt; color: #1e3a8a; margin: 16px 0 6px; text-transform: uppercase; }
+    p, li { text-align: justify; }
+    ul { margin: 4px 0 10px; padding-left: 18px; }
+    li { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; font-size: 8.8pt; margin: 8px 0 14px; }
+    th { background: #1e3a8a; color: #fff; padding: 6px; border: 1px solid #1e3a8a; text-align: center; }
+    td { padding: 5px 6px; border: 1px solid #cbd5e1; text-align: center; }
+    td:first-child, td:nth-child(2) { text-align: left; font-weight: 600; }
+    .grp-com td { background: #eff6ff; }
+    .grp-20k td { background: #f0fdfa; }
+    .ok { color: #15803d; font-weight: 700; }
+    .bold { font-weight: 700; color: #0f172a; }
+    .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+    .chart-box { border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px; text-align: center; background: #fff; }
+    .chart-box img { width: 100%; height: auto; }
+    .chart-full { border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px; text-align: center; background: #fff; margin: 10px 0; }
+    .chart-full img { width: 78%; height: auto; }
+    .callout { background: #f8fafc; border-left: 4px solid #0d9488; padding: 8px 12px; margin: 8px 0; font-size: 9.5pt; }
+  </style>
+</head>
+<body>
+
+  <h1>Mini Relatório — Resultados da Nova Bateria (NGINX + 2 Flasks + SQL Corrigido)</h1>
+  <div class="sub">Comparativo entre 100k Sem Índice, 100k Com Índice e 20k Sem Índice (1.200 requisições por teste)</div>
+
+  <h2>1. Tabela Consolidada dos Novos Resultados</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Configuração do BD</th>
+        <th>Cenário</th>
+        <th>Taxa de Erro</th>
+        <th>Média Leitura</th>
+        <th>Média Escrita</th>
+        <th>Média Total</th>
+        <th>Latência P95</th>
+        <th>Vazão (req/s)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>100k SEM Índice</td>
+        <td>A (50% L / 50% E)</td>
+        <td class="ok">0,00%</td>
+        <td>2.278,7 ms</td>
+        <td>2.331,1 ms</td>
+        <td class="bold">2.304,9 ms</td>
+        <td>3.401,9 ms</td>
+        <td class="bold">92,89 req/s</td>
+      </tr>
+      <tr>
+        <td>100k SEM Índice</td>
+        <td>B (75% L / 25% E)</td>
+        <td class="ok">0,00%</td>
+        <td>2.664,2 ms</td>
+        <td>2.755,6 ms</td>
+        <td class="bold">2.687,1 ms</td>
+        <td>4.280,9 ms</td>
+        <td class="bold">86,84 req/s</td>
+      </tr>
+      <tr>
+        <td>100k SEM Índice</td>
+        <td>C (25% L / 75% E)</td>
+        <td class="ok">0,00%</td>
+        <td>1.716,7 ms</td>
+        <td>1.746,4 ms</td>
+        <td class="bold">1.738,9 ms</td>
+        <td>2.655,6 ms</td>
+        <td class="bold">99,41 req/s</td>
+      </tr>
+
+      <tr class="grp-com">
+        <td>100k COM Índice</td>
+        <td>A (50% L / 50% E)</td>
+        <td class="ok">0,00%</td>
+        <td>1.505,5 ms</td>
+        <td>1.428,6 ms</td>
+        <td class="bold">1.467,0 ms</td>
+        <td>2.192,9 ms</td>
+        <td class="bold">101,41 req/s</td>
+      </tr>
+      <tr class="grp-com">
+        <td>100k COM Índice</td>
+        <td>B (75% L / 25% E)</td>
+        <td class="ok">0,00%</td>
+        <td>1.628,2 ms</td>
+        <td>1.543,5 ms</td>
+        <td class="bold">1.607,1 ms</td>
+        <td>2.542,4 ms</td>
+        <td class="bold">103,45 req/s</td>
+      </tr>
+      <tr class="grp-com">
+        <td>100k COM Índice</td>
+        <td>C (25% L / 75% E)</td>
+        <td class="ok">0,00%</td>
+        <td>1.205,0 ms</td>
+        <td>1.189,1 ms</td>
+        <td class="bold">1.193,1 ms</td>
+        <td>1.850,9 ms</td>
+        <td class="bold">107,56 req/s</td>
+      </tr>
+
+      <tr class="grp-20k">
+        <td>20k SEM Índice</td>
+        <td>A (50% L / 50% E)</td>
+        <td class="ok">0,00%</td>
+        <td>1.162,5 ms</td>
+        <td>1.219,7 ms</td>
+        <td class="bold">1.191,1 ms</td>
+        <td>1.825,6 ms</td>
+        <td class="bold">104,12 req/s</td>
+      </tr>
+      <tr class="grp-20k">
+        <td>20k SEM Índice</td>
+        <td>B (75% L / 25% E)</td>
+        <td class="ok">0,00%</td>
+        <td>1.660,8 ms</td>
+        <td>1.720,8 ms</td>
+        <td class="bold">1.675,8 ms</td>
+        <td>2.545,0 ms</td>
+        <td class="bold">99,24 req/s</td>
+      </tr>
+      <tr class="grp-20k">
+        <td>20k SEM Índice</td>
+        <td>C (25% L / 75% E)</td>
+        <td class="ok">0,00%</td>
+        <td>1.416,0 ms</td>
+        <td>1.493,2 ms</td>
+        <td class="bold">1.473,9 ms</td>
+        <td>2.346,9 ms</td>
+        <td class="bold">101,56 req/s</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2. Gráficos Comparativos</h2>
+  <div class="charts">
+    <div class="chart-box">
+      <img src="graficos/novo_latencia_media.png" alt="Latência Média">
+    </div>
+    <div class="chart-box">
+      <img src="graficos/novo_throughput.png" alt="Throughput">
+    </div>
+  </div>
+  <div class="chart-full">
+    <img src="graficos/comparativo_erros_antes_depois.png" alt="Queda de Erros">
+  </div>
+
+  <h2>3. O que mudou e por que agora faz todo sentido?</h2>
+  <ul>
+    <li><strong>Mudança 1 — Erros caíram de 7%–14% para 0,00% (Zero Erros!):</strong> Com a colocação do <strong>NGINX</strong> na porta 5000 distribuindo a carga para <strong>2 réplicas do Flask</strong> (portas 5001 e 5002), nenhuma das 10.800 requisições falhou. O NGINX gerenciou a fila de entrada de conexões HTTP sem deixar o Flask rejeitar clientes.</li>
+    <li><strong>Mudança 2 — O Índice B-Tree agora melhorou drasticamente o desempenho (até 40% mais rápido):</strong> Ao corrigirmos a consulta SQL na API para realmente filtrar por <code>WHERE cidade = 'Manaus'</code>, o banco <strong>100k COM Índice</strong> usou <em>Index Scan</em> e reduziu o tempo médio de <strong>2.687 ms para 1.607 ms</strong> no cenário de leitura intensa (75/25), aumentando a vazão de <strong>86,84 req/s para 103,45 req/s</strong>.</li>
+    <li><strong>Mudança 3 — Reduzir de 100k para 20k (ambos sem índice) reduziu a latência quase pela metade:</strong> Como sem índice o PostgreSQL precisa ler a tabela inteira (<em>Sequential Scan</em>), ler apenas 20.000 registros baixou o tempo médio de <strong>2.304 ms para 1.191 ms</strong> no cenário 50/50 (e de <strong>2.687 ms para 1.675 ms</strong> no 75/25).</li>
+  </ul>
+
+</body>
+</html>
